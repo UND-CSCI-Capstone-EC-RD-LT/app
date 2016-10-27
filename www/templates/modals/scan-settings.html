@@ -1,0 +1,58 @@
+<ion-modal-view class="Scan-Settings">
+
+    <!-- Header Bar -->
+    <ion-header-bar align-title="center">
+        <a class="button button-icon icon ion-close" ng-click="vm.cancelEditScanSettings()"></a>
+        <div class="title">Edit Scan Settings</div>
+        <a class="button button-icon icon ion-checkmark" ng-click="vm.confirmEditScanSettings()" ng-disabled="!vm.editScanSettingsForm.$valid"></a>
+    </ion-header-bar>
+
+    <!-- Content -->
+    <ion-content>
+        <form name="vm.editScanSettingsForm" novalidate>
+            <ion-list class="modal-item">
+
+                <!-- Department -->
+                <label class="item item-input item-select">
+                    <h2 class="input-label">Department</h2>
+                    <select ng-model="vm.scanSettings.department" ng-required="true">
+                        <option ng-repeat="department in vm.modal.departments">{{ department.name }}</option>
+                    </select>
+                </label>
+
+                <!-- Building -->
+                <label class="item item-input item-select">
+                    <h2 class="input-label">Building</h2>
+                    <select ng-model="vm.scanSettings.building" ng-required="true">
+                        <option ng-repeat="building in vm.modal.buildings">{{ building.name }}</option>
+                    </select>
+                </label>
+
+                <!-- Room -->
+                <label class="item item-input item-select">
+                    <h2 class="input-label">Room</h2>
+                    <select ng-model="vm.scanSettings.room" ng-required="true">
+                        <option ng-repeat="room in vm.modal.rooms">{{ room.name }}</option>
+                    </select>
+                </label>
+
+                <!-- Scan Type -->
+                <label class="item item-input item-select">
+                    <h2 class="input-label">Scan Type</h2>
+                    <select ng-model="vm.scanSettings.scanType" ng-required="true" >
+                        <option selected="selected">Single Item</option>
+                        <option >Batch</option>
+                    </select>
+                </label>
+
+                <label class="item">
+                    <span class="item-note">John Smith</span>
+                    <h2>User</h2>
+                </label>
+
+            </ion-list>
+        </form>
+        <!-- Logout Button -->
+        <button class="button button-full button-outline button-positive" ng-click="vm.newScan()">New Scan</button>
+    </ion-content>
+</ion-modal-view>

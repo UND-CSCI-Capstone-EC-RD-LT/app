@@ -1,0 +1,75 @@
+<ion-view view-title="Edit Item" class="Edit-Item">
+    <ion-nav-buttons side="right">
+        <a class="button button-icon icon ion-checkmark" ng-click="vm.confirmEditItem()" ng-disabled="!vm.editItemForm.$valid"></a>
+    </ion-nav-buttons>
+    <ion-content>
+        <ion-refresher on-refresh="vm.onRefresh()"></ion-refresher>
+
+        <div ng-show="vm.render">
+
+            <form name="vm.editItemForm" novalidate>
+                <ion-list>
+
+                    <label class="item">
+                        <span class="item-note">M-123456</span>
+                        <h2>Item ID</h2>
+                    </label>
+
+                    <!-- Department -->
+                    <label class="item item-input item-select">
+                        <h2 class="input-label">Department</h2>
+                        <select ng-model="vm.scanSettings.department" ng-required="true">
+                            <option ng-repeat="department in vm.departments">{{ department.name }}</option>
+                        </select>
+                    </label>
+
+                    <!-- Building -->
+                    <label class="item item-input item-select">
+                        <h2 class="input-label">Building</h2>
+                        <select ng-model="vm.scanSettings.building" ng-required="true">
+                            <option ng-repeat="building in vm.buildings">{{ building.name }}</option>
+                        </select>
+                    </label>
+
+                    <!-- Room -->
+                    <label class="item item-input item-select">
+                        <h2 class="input-label">Room</h2>
+                        <select ng-model="vm.scanSettings.room" ng-required="true">
+                            <option ng-repeat="room in vm.rooms">{{ room.name }}</option>
+                        </select>
+                    </label>
+
+                    <!-- Scan Type -->
+                    <label class="item item-input item-select">
+                        <h2 class="input-label">Item Type</h2>
+                        <select ng-model="vm.scanSettings.scanType" ng-required="true" >
+                            <option>Computer</option>
+                            <option>Desk</option>
+                        </select>
+                    </label>
+
+                    <label class="item">
+                        <span class="item-note">$20.00</span>
+                        <h2>Bought Price</h2>
+                    </label>
+
+                    <label class="item">
+                        <span class="item-note">$15.00</span>
+                        <h2>Current Value</h2>
+                    </label>
+
+                    <label class="item">
+                        <span class="item-note">John Smith</span>
+                        <h2>Last Scanned</h2>
+                    </label>
+
+                    <label class="item">
+                        <span class="item-note">Small chip on edge.</span>
+                        <h2>Description</h2>
+                    </label>
+
+                </ion-list>
+            </form>
+        </div>
+    </ion-content>
+</ion-view>

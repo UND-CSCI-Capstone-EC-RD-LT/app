@@ -1,0 +1,67 @@
+<ion-view view-title="{{vm.viewTitle}}" class="Scan-Items">
+	<ion-nav-buttons side="right">
+		<span ng-if="!vm.scanSettingsSet">
+			<a ng-if="!vm.scanSettingsSet" class="button button-icon icon ion-checkmark" ng-click="vm.confirmScanSettings()" ng-disabled="!vm.scanSettingsForm.$valid"></a>
+		</span>
+        <span ng-if="vm.scanSettingsSet">
+        	<a class="button button-icon icon ion-gear-a" ng-click="vm.editScanSettings()"></a>
+    	</span>
+    </ion-nav-buttons>
+  	<ion-content ng-show="vm.render" scroll="false">
+  		<div ng-if="vm.scanSettingsSet">
+    		<h1>Camera View</h1>
+    	</div>
+    	<div ng-if="!vm.scanSettingsSet">
+    		<form name="vm.scanSettingsForm" novalidate>
+	            <ion-list>
+
+	                <!-- Department -->
+	                <label class="item item-input item-select">
+	                    <h2 class="input-label">Department</h2>
+	                    <select ng-model="vm.scanSettings.department" ng-required="true" ng-change="vm.getDepartmentBuildings(vm.scanSettings.department)">
+	                        <option ng-repeat="department in vm.departments" value="{{department.id}}">{{ department.name }}</option>
+	                    </select>
+	                </label>
+
+	                <!-- Building -->
+	                <label class="item item-input item-select">
+	                    <h2 class="input-label">Building</h2>
+	                    <select ng-model="vm.scanSettings.building" ng-change="vm.getBuildingRooms(vm.scanSettings.building)" ng-required="true" ng-disabled="!vm.scanSettings.department">
+	                        <option ng-repeat="building in vm.buildings" value="{{building.id}}">{{ building.name }}</option>
+	                    </select>
+	                </label>
+
+	                <!-- Room -->
+	                <label class="item item-input item-select">
+	                    <h2 class="input-label">Room</h2>
+	                    <select ng-model="vm.scanSettings.room" ng-required="true" ng-disabled="!vm.scanSettings.building">
+	                        <option ng-repeat="room in vm.rooms">{{ room.number }}</option>
+	                    </select>
+	                </label>
+
+	                <!-- Scan Type -->
+	                <label class="item item-input item-select">
+	                    <h2 class="input-label">Scan Type</h2>
+	                    <select ng-model="vm.scanSettings.scanType" ng-required="true" >
+	                        <option>Single Item</option>
+	                        <option>Batch</option>
+	                    </select>
+	                </label>
+
+	                <label class="item">
+	                    <span class="item-note">John Smith</span>
+	                    <h2>User</h2>
+	                </label>
+
+	            </ion-list>
+	        </form>
+	    </div>
+  	</ion-content>
+  	<ion-footer-bar ng-if="vm.scanSettingsSet && vm.scanSettings.scanType == 'Batch'" ng-click="vm.showItems()">
+  		<div class="items">
+  			<i class="icon ion-ios-arrow-up"></i>
+  			<span>Items</span>
+  		</div>
+	</ion-footer-bar>
+</ion-view>
+

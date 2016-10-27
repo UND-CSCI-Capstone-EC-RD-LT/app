@@ -1,0 +1,41 @@
+.Menu ion-item:hover {
+	cursor: pointer;
+}
+
+.Scan-Items ion-footer-bar:hover {
+	cursor: pointer;
+}
+
+.Scan-Items .items {
+	width: 100%;
+	bottom: 10px;
+	line-height: 32px;
+	position: relative;
+	font-size: 17px;
+	text-align: center;
+}
+
+.Scan-Items .items .ion-ios-arrow-up {
+	display: block;
+	height: 17px;
+	font-size: 32px;
+}
+
+.Items-Modal ion-header-bar:hover {
+	cursor: pointer;
+}
+
+.Items-Modal .items {
+	width: 100%;
+	bottom: 10px;
+	line-height: 27px;
+	position: relative;
+	font-size: 17px;
+	text-align: center;
+}
+
+.Items-Modal .items .ion-ios-arrow-down {
+	display: block;
+	height: 17px;
+	font-size: 32px;
+}
