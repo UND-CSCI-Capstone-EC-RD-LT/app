@@ -8,7 +8,7 @@
     function Rooms($rootScope, $http, $q, API) {
 
         function getBuildingRooms(buildingId) {
-            return $http.get(API.sailsUrl + 'v1/buildings/' + buildingId + '/room')
+            return $http.get(API.sailsUrl + '/rooms/building/'+buildingId)
                 .then(function success(res) {
                     if(res.data) {
                         return res.data.data.rooms;

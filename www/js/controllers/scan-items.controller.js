@@ -21,7 +21,12 @@
             }
         });
 
-        onEnter();
+        // DEVELOPMENT ONLY
+        // WAITING SO THE JWT TOKEN IS SET BEFORE CALLING
+        $timeout(function() {
+            onEnter();
+        }, 2000);
+        
 
         //// INITIALIZATION FUNCTIONS ////
 
