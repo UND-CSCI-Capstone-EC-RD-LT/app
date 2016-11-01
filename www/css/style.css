@@ -39,3 +39,23 @@
 	height: 17px;
 	font-size: 32px;
 }
+
+.View-Items .results div {
+	margin-top: 25px;
+}
+
+/* Animate the inner content when the content is clicked */
+.View-Items .accordion {
+    transition: all 0.09s linear;
+} .View-Items .accordion.no-animate {
+    transition: none;
+}
+
+/* The properties to animate for the inner content (see above) */
+.View-Items .hidden {
+    height: 0;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border: 0;
+}
