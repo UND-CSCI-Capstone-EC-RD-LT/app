@@ -8,7 +8,7 @@
     function Departments($rootScope, $http, $q, API) {
 
         function getDepartments() {
-            return $http.get(API.sailsUrl + 'v1/departments')
+            return $http.get(API.sailsUrl + '/departments')
                 .then(function success(res) {
                     if(res.data) {
                         return res.data.data;
