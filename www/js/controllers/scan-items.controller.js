@@ -83,6 +83,8 @@
         }
 
         function getDepartmentBuildingsApi(departmentId) {
+            vm.scanSettings.building = null;
+            vm.scanSettings.room = null;
             return Buildings.getDepartmentBuildings(departmentId)
                 .then(function success(buildings) {
                     return buildings;
@@ -93,6 +95,7 @@
         }
 
         function getBuildingRoomsApi(buildingId) {
+            vm.scanSettings.room = null;
             return Rooms.getBuildingRooms(buildingId)
                 .then(function success(rooms) {
                     return rooms;
