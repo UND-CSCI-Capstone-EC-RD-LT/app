@@ -40,10 +40,6 @@
 	font-size: 32px;
 }
 
-.View-Items .results div {
-	margin-top: 25px;
-}
-
 /* Animate the inner content when the content is clicked */
 .View-Items .accordion {
     transition: all 0.09s linear;

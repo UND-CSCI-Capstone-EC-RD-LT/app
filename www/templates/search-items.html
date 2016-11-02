@@ -25,11 +25,11 @@
 		    <label class="item item-input item-select">
 		        <h2 class="input-label">Room</h2>
 		        <select ng-model="vm.search.room" ng-disabled="!vm.search.building">
-		            <option ng-repeat="room in vm.rooms">{{ room.number }}</option>
+		            <option ng-repeat="room in vm.rooms" value="{{room.id}}">{{ room.number }}</option>
 		        </select>
 		    </label>
 		</ion-list>
 	</form>
-	<button class="button button-full button-positive search" ng-disabled="!vm.searchFilterForm.$valid">Search</button>
+	<button class="button button-full button-positive search" ng-disabled="!vm.searchFilterForm.$valid" ng-click="vm.searchItems()">Search</button>
   </ion-content>
 </ion-view>

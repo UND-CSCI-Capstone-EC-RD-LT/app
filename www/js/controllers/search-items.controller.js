@@ -3,17 +3,21 @@
 
     angular
         .module('app.controllers')
-        .controller('SearchItemsController', ['$q', 'Items', 'Departments', 'Buildings', 'Rooms', SearchItemsController]);
+        .controller('SearchItemsController', ['$state', '$q', '$timeout', 'Items', 'Departments', 'Buildings', 'Rooms', SearchItemsController]);
 
-    function SearchItemsController($q, Items, Departments, Buildings, Rooms) {
+    function SearchItemsController($state, $q, $timeout, Items, Departments, Buildings, Rooms) {
         var vm = this;
 
-        onEnter();
+        // DEVELOPMENT ONLY
+        // WAITING SO THE JWT TOKEN IS SET BEFORE CALLING
+        $timeout(function() {
+            onEnter();
+        }, 1000);
 
         //// INITIALIZATION FUNCTIONS ////
 
         function onEnter(isRefresh) {
-            console.log('ViewItemsController');
+            console.log('SearchItemsController');
             vm.render = false;
 
             vm.accordion = {
@@ -93,6 +97,8 @@
         //// VIEW MODEL FUNCTIONS ////
 
         vm.getDepartmentBuildings = function(departmentId) {
+            vm.search.building = null;
+            vm.search.room = null;
             getDepartmentBuildingsApi(departmentId)
                 .then(function success(buildings) {
                     console.log(buildings);
@@ -103,6 +109,7 @@
         }
 
         vm.getBuildingRooms = function(buildingId) {
+            vm.search.room = null;
             getBuildingRoomsApi(buildingId)
                 .then(function success(rooms) {
                     console.log(rooms);
@@ -110,6 +117,11 @@
                 }).catch(function error() {
                     // error handling
                 });
+        }
+
+        vm.searchItems = function() {
+            console.log(vm.search);
+            $state.go('.view-items');
         }
 
         //// END VIEW MODEL FUNCTIONS ////
