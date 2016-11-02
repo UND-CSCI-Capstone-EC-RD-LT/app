@@ -25,8 +25,7 @@
         // WAITING SO THE JWT TOKEN IS SET BEFORE CALLING
         $timeout(function() {
             onEnter();
-        }, 2000);
-        
+        }, 1000);
 
         //// INITIALIZATION FUNCTIONS ////
 
