@@ -39,12 +39,12 @@
                 }
             })
 
-            .state('app.view-items', {
+            .state('app.search-items', {
                 url: '/view-items',
                 views: {
                     'menuContent': {
-                        templateUrl: 'templates/view-items.html',
-                        controller: 'ViewItemsController',
+                        templateUrl: 'templates/search-items.html',
+                        controller: 'SearchItemsController',
                         controllerAs: 'vm'
                     }
                 }

@@ -1,36 +1,4 @@
-<ion-view view-title="View Items" class="View-Items">
-  <ion-content ng-show="vm.render">
-  	<form name="vm.searchFilterForm" novalidate>
-	    <ion-list>
-	    	<ion-item class="item-divider">
-    			Filter
-  			</ion-item>
-			<!-- Department -->
-		    <label class="item item-input item-select">
-		        <h2 class="input-label">Department</h2>
-		        <select ng-model="vm.search.department" ng-required="true" ng-change="vm.getDepartmentBuildings(vm.search.department)">
-		            <option ng-repeat="department in vm.departments" value="{{department.id}}">{{ department.name }}</option>
-		        </select>
-		    </label>
-
-		    <!-- Building -->
-		    <label class="item item-input item-select">
-		        <h2 class="input-label">Building</h2>
-		        <select ng-model="vm.search.building" ng-change="vm.getBuildingRooms(vm.search.building)" ng-disabled="!vm.search.department">
-		            <option ng-repeat="building in vm.buildings" value="{{building.id}}">{{ building.name }}</option>
-		        </select>
-		    </label>
-
-		    <!-- Room -->
-		    <label class="item item-input item-select">
-		        <h2 class="input-label">Room</h2>
-		        <select ng-model="vm.search.room" ng-disabled="!vm.search.building">
-		            <option ng-repeat="room in vm.rooms">{{ room.number }}</option>
-		        </select>
-		    </label>
-		</ion-list>
-	</form>
-	<ion-list class="results">
+<ion-list class="results">
 		<ion-item class="item-divider">
     		Results
   		</ion-item>
@@ -62,6 +30,3 @@
 		    <i class="icon ion-ios-arrow-right"></i>
 		</a>
 	</ion-list>
-	<!-- <button class="button button-full button-positive search" ng-disabled="!vm.searchFilterForm.$valid">Search</button> -->
-  </ion-content>
-</ion-view>

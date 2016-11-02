@@ -9,7 +9,7 @@
 
         function getDepartmentBuildings(departmentId) {
             console.log(departmentId);
-            return $http.get(API.sailsUrl + 'v1/departments/' + departmentId + '/building')
+            return $http.get(API.sailsUrl + '/departments/' + departmentId + '/building')
                 .then(function success(res) {
                     if(res.data) {
                         return res.data.data.buildings;
