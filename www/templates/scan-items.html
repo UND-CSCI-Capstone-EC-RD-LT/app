@@ -18,24 +18,24 @@
 	                <!-- Department -->
 	                <label class="item item-input item-select">
 	                    <h2 class="input-label">Department</h2>
-	                    <select ng-model="vm.scanSettings.department" ng-required="true" ng-change="vm.getDepartmentBuildings(vm.scanSettings.department)">
-	                        <option ng-repeat="department in vm.departments" value="{{department.id}}">{{ department.name }}</option>
+	                    <select ng-model="vm.index.department" ng-required="true" ng-change="vm.setScanSettingDepartment(vm.index.department)">
+	                        <option ng-repeat="department in vm.departments" value="{{$index}}">{{ department.name }}</option>
 	                    </select>
 	                </label>
 
 	                <!-- Building -->
 	                <label class="item item-input item-select">
 	                    <h2 class="input-label">Building</h2>
-	                    <select ng-model="vm.scanSettings.building" ng-change="vm.getBuildingRooms(vm.scanSettings.building)" ng-required="true" ng-disabled="!vm.scanSettings.department">
-	                        <option ng-repeat="building in vm.buildings" value="{{building.id}}">{{ building.name }}</option>
+	                    <select ng-model="vm.index.building" ng-change="vm.setScanSettingBuilding(vm.index.building)" ng-required="true" ng-disabled="!vm.index.department">
+	                        <option ng-repeat="building in vm.buildings" value="{{$index}}">{{ building.name }}</option>
 	                    </select>
 	                </label>
 
 	                <!-- Room -->
 	                <label class="item item-input item-select">
 	                    <h2 class="input-label">Room</h2>
-	                    <select ng-model="vm.scanSettings.room" ng-required="true" ng-disabled="!vm.scanSettings.building">
-	                        <option ng-repeat="room in vm.rooms">{{ room.number }}</option>
+	                    <select ng-model="vm.index.room"  ng-change="vm.setScanSettingRoom(vm.index.building)" ng-required="true" ng-disabled="!vm.index.building">
+	                        <option ng-repeat="room in vm.rooms" value="{{$index}}">{{ room.number }}</option>
 	                    </select>
 	                </label>
 
@@ -46,11 +46,6 @@
 	                        <option>Single Item</option>
 	                        <option>Batch</option>
 	                    </select>
-	                </label>
-
-	                <label class="item">
-	                    <span class="item-note">John Smith</span>
-	                    <h2>User</h2>
 	                </label>
 
 	            </ion-list>

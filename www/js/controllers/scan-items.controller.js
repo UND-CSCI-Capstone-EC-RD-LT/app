@@ -38,6 +38,12 @@
             // for modal data
             vm.modal = {}
 
+            vm.index = {
+                department: null,
+                building: null,
+                room: null
+            };
+
             vm.scanSettingsSet = false;
 
             vm.scanSettings = {
@@ -83,8 +89,6 @@
         }
 
         function getDepartmentBuildingsApi(departmentId) {
-            vm.scanSettings.building = null;
-            vm.scanSettings.room = null;
             return Buildings.getDepartmentBuildings(departmentId)
                 .then(function success(buildings) {
                     return buildings;
@@ -95,7 +99,6 @@
         }
 
         function getBuildingRoomsApi(buildingId) {
-            vm.scanSettings.room = null;
             return Rooms.getBuildingRooms(buildingId)
                 .then(function success(rooms) {
                     return rooms;
@@ -109,8 +112,17 @@
 
         //// VIEW MODEL FUNCTIONS ////
 
-        vm.getDepartmentBuildings = function(departmentId) {
-            getDepartmentBuildingsApi(departmentId)
+        vm.setScanSettingDepartment = function(departmentIndex) {
+            // setting department scan settings
+            vm.scanSettings.department = vm.departments[departmentIndex];
+
+            // reset the building and room when new department is selected
+            vm.scanSettings.building = null;
+            vm.index.building = null;
+            vm.scanSettings.room = null;
+            vm.index.room = null;
+
+            getDepartmentBuildingsApi(vm.scanSettings.department.id)
                 .then(function success(buildings) {
                     console.log(buildings);
                     vm.buildings = buildings;
@@ -119,14 +131,25 @@
                 });
         }
 
-        vm.getBuildingRooms = function(buildingId) {
-            getBuildingRoomsApi(buildingId)
+        vm.setScanSettingBuilding = function(buildingIndex) {
+            // setting building scan settings
+            vm.scanSettings.building = vm.buildings[buildingIndex];
+
+            // reset the room when new building is selected
+            vm.scanSettings.room = null;
+            vm.index.room = null;
+            getBuildingRoomsApi(vm.scanSettings.building.id)
                 .then(function success(rooms) {
                     console.log(rooms);
                     vm.rooms = rooms;
                 }).catch(function error() {
                     // error handling
                 });
+        }
+
+        vm.setScanSettingRoom = function(roomIndex) {
+            // setting room scan settings
+            vm.scanSettings.room = vm.rooms[roomIndex];
         }
 
         vm.editScanSettings = function() {
@@ -176,6 +199,7 @@
         }
 
         vm.confirmScanSettings = function() {
+            console.log(vm.scanSettings);
             vm.scanSettingsSet = true;
             vm.viewTitle = 'Scan Items';
         };

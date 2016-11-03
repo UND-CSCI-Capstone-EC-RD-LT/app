@@ -39,3 +39,12 @@
 	height: 17px;
 	font-size: 32px;
 }
+
+/* Place the content at the bottom of its parent content */
+.Scan-Settings .scroll {
+    height: 100%;
+} .Scan-Settings .button-bottom {
+    position: absolute;
+    bottom: 0;
+    font-weight: 600;
+}
