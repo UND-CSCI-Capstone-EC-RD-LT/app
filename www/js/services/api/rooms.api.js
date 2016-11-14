@@ -23,6 +23,22 @@
                 });
         }
 
+        function getItems(roomId) {
+            return $http.get(API.sailsUrl + '/rooms/' + roomId + '/item')
+                .then(function success(res) {
+                    if(res.data) {
+                        return res.data.data.items;
+                    } else {
+                        return $q.reject(res.data);
+                    }
+                }).catch(function error(reason) {
+                    return $q.reject({
+                        error: 'Error with API request.',
+                        origErr: reason
+                    });
+                });
+        }
+
         function updateExample(example) {
             return $http({
                 method: 'POST',
@@ -66,6 +82,7 @@
 
         return {
             getBuildingRooms : getBuildingRooms,
+            getItems         : getItems,
             updateExample    : updateExample,
             insertExample    : insertExample
         };

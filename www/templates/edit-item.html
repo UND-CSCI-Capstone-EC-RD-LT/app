@@ -11,8 +11,13 @@
                 <ion-list>
 
                     <label class="item">
-                        <span class="item-note">M-123456</span>
-                        <h2>Item ID</h2>
+                        <span class="item-note">{{vm.item.barcode}}</span>
+                        <h2>Barcode</h2>
+                    </label>
+
+                    <label class="item">
+                        <span class="item-note">{{vm.item.creator}}</span>
+                        <h2>Last Scanned</h2>
                     </label>
 
                     <!-- Department -->
@@ -39,7 +44,7 @@
                         </select>
                     </label>
 
-                    <!-- Scan Type -->
+                    <!-- Item Type -->
                     <label class="item item-input item-select">
                         <h2 class="input-label">Item Type</h2>
                         <select ng-model="vm.scanSettings.scanType" ng-required="true" >
@@ -48,24 +53,20 @@
                         </select>
                     </label>
 
-                    <label class="item">
-                        <span class="item-note">$20.00</span>
-                        <h2>Bought Price</h2>
+
+                    <label class="item item-input item-stacked-label">
+                        <h2 class="input-label">Bought Price</h2>
+                        <input type="text" name="bought-price" placeholder="$0.00" ng-model="vm.item.boughtPrice" ng-required="true" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" >
                     </label>
 
-                    <label class="item">
-                        <span class="item-note">$15.00</span>
-                        <h2>Current Value</h2>
+                    <label class="item item-input item-stacked-label">
+                        <h2 class="input-label">Current Value</h2>
+                        <input type="text" name="current-value" placeholder="$0.00" ng-model="vm.item.currentPrice" ng-required="true" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" >
                     </label>
 
-                    <label class="item">
-                        <span class="item-note">John Smith</span>
-                        <h2>Last Scanned</h2>
-                    </label>
-
-                    <label class="item">
-                        <span class="item-note">Small chip on edge.</span>
-                        <h2>Description</h2>
+                    <label class="item item-input item-stacked-label">
+                        <h2 class="input-label">Description</h2>
+                        <input type="text" name="description" placeholder="Description" ng-model="vm.item.description" ng-required="true" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" >
                     </label>
 
                 </ion-list>

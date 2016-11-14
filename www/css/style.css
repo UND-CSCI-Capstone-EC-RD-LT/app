@@ -21,6 +21,10 @@
 	font-size: 32px;
 }
 
+.Scan-Items .camera-view {
+	height: 100%;
+}
+
 .Items-Modal ion-header-bar:hover {
 	cursor: pointer;
 }
@@ -47,4 +51,8 @@
     position: absolute;
     bottom: 0;
     font-weight: 600;
+}
+
+.Items-Modal .ion-checkmark-circled {
+	color: #009A44;
 }

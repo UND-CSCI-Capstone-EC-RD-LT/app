@@ -14,20 +14,21 @@
             	<div class="item item-divider">
 					In Room
 				</div>
-            	<ion-item ng-repeat="item in vm.modal.items" ng-click="vm.editItem()">
-                    <h2>{{ item.name }}</h2>
+            	<ion-item ng-repeat="item in vm.items.inRoom" class="item-icon-right" ng-click="vm.editItem(item)">
+                    <h2>{{ item.barcode }}</h2>
+                    <i ng-if="item.scanned" class="icon ion-checkmark-circled"></i>
                 </ion-item>
-                <div class="item item-divider">
+                <div ng-if="vm.items.inWrongRoom.length" class="item item-divider">
 					In Wrong Room
 				</div>
-            	<ion-item ng-repeat="item in vm.modal.items" ng-click="vm.editItem()">
-                    <h2>{{ item.name }}</h2>
+            	<ion-item ng-repeat="item in vm.items.inWrongRoom" ng-click="vm.editItem(item)">
+                    <h2>{{ item.barcode }}</h2>
                 </ion-item>
-                <div class="item item-divider">
+                <div ng-if="vm.items.newItems.length" class="item item-divider">
 					New Items
 				</div>
-            	<ion-item ng-repeat="item in vm.modal.items" ng-click="vm.editItem()">
-                    <h2>{{ item.name }}</h2>
+            	<ion-item ng-repeat="item in vm.items.newItems" ng-click="vm.editItem(item)">
+                    <h2>{{ item.barcode }}</h2>
                 </ion-item>
             </ion-list>
     </ion-content>

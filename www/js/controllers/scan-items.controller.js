@@ -13,7 +13,7 @@
         // The edit user modal
         var editScanSettings = null;
         // The items modal
-        var items = null;
+        var itemsModal = null;
 
         $rootScope.$on('$stateChangeSuccess', function (ev, toState, toParams, fromState, fromParams) {
             if(fromState.name == 'app.edit-item') {
@@ -53,6 +53,12 @@
                 scanType: 'Batch'
             };
 
+            vm.items = {
+                inRoom: [],
+                inWrongRoom: [],
+                newItems: []
+            }
+
             vm.departments = [];
             vm.buildings = [];
             vm.rooms = [];
@@ -64,13 +70,21 @@
         // Retrieves the data from the db
         function getData(isRefresh) {
 
-            getDepartmentsApi()
-                .then(function success(departments) {
-                    console.log(departments);
-                    vm.departments = departments;
+            getRoomItemsApi(1)
+                .then(function success(items) {
+                    console.log(items);
+                    vm.items.inRoom = items;
                 }).catch(function error() {
                     // error handling
                 });
+
+            // getDepartmentsApi()
+            //     .then(function success(departments) {
+            //         console.log(departments);
+            //         vm.departments = departments;
+            //     }).catch(function error() {
+            //         // error handling
+            //     });
 
         }
 
@@ -102,6 +116,26 @@
             return Rooms.getBuildingRooms(buildingId)
                 .then(function success(rooms) {
                     return rooms;
+                }).catch(function error(reason) {
+                    //error handling
+                    return $q.reject();
+                });
+        }
+
+        function getRoomItemsApi(roomId) {
+            return Rooms.getItems(roomId)
+                .then(function success(items) {
+                    return items;
+                }).catch(function error(reason) {
+                    //error handling
+                    return $q.reject();
+                });
+        }
+
+        function getItemBarcodeApi(barcode) {
+            return Items.getItemBarcode(barcode)
+                .then(function success(item) {
+                    return item;
                 }).catch(function error(reason) {
                     //error handling
                     return $q.reject();
@@ -200,32 +234,33 @@
 
         vm.confirmScanSettings = function() {
             console.log(vm.scanSettings);
+            getRoomItemsApi(vm.scanSettings.room.id)
+                .then(function success(items) {
+                    console.log(items);
+                    vm.items.inRoom = items;
+                }).catch(function error() {
+                    // error handling
+                });
             vm.scanSettingsSet = true;
             vm.viewTitle = 'Scan Items';
         };
 
         vm.showItems = function() {
-            if(!items) {
+            if(!itemsModal) {
                 $ionicModal.fromTemplateUrl('templates/modals/items.html', {
                     scope: $scope,
                     animation: 'slide-in-up' // maybe use slide-in-down if it works on mobile
                 }).then(function success(modal) {
-                    items = modal;
+                    itemsModal = modal;
 
                     $scope.$on('modal.hidden', function() {
                         clearItemsModalData();
                     });
 
-                    addItemsModalData()
-                        // .then(function success() {
-                            items.show();
-                        // });
+                    itemsModal.show();
                 });
             } else {
-                addItemsModalData()
-                    // .then(function success() {
-                        items.show();
-                    // });
+                itemsModal.show();
             }
         };
 
@@ -234,9 +269,30 @@
             hideItemsModal();
         };
 
-        vm.editItem = function() {
+        vm.editItem = function(item) {
             hideItemsModal();
-            $state.go('^.edit-item', {itemId: 1});
+            $state.go('^.edit-item', {itemId: item.id});
+        }
+
+        vm.scanItem = function() {
+            console.log('Scanning Item');
+            var barcode = 12348;
+            if(!checkItem(barcode)) {
+                console.log('Check if item exists');
+                getItemBarcodeApi(barcode)
+                    .then(function success(item) {
+                        console.log(item);
+                        if(item.barcode) {
+                            vm.items.inWrongRoom.push(item);
+                        } else {
+                            vm.items.newItems.push({
+                                barcode: barcode
+                            })
+                        }
+                    }).catch(function error() {
+                        // error handling
+                    });
+            }
         }
 
         //// END VIEW MODEL FUNCTIONS ////
@@ -283,19 +339,6 @@
             
         }
 
-        function addItemsModalData() {
-            angular.extend(vm.modal, {
-                items: []
-            });
-
-            // Retrieves the possible cell carriers
-            for (var i = 0; i < 3; i++) {
-                vm.modal.items.push({
-                    name: 'Item ' + (i+1)
-                });
-            }
-        }
-
         // Clears the edit user modal data and resets its form
         function clearItemsModalData() {
 
@@ -303,9 +346,22 @@
 
         // Hides the edit user modal
         function hideItemsModal() {
-            items.hide();
+            itemsModal.hide();
         }
 
         //// END MODAL FUNCTIONS ////
+
+        function checkItem(barcode){
+            var itemInRoom = false
+            console.log(vm.items.inRoom);
+            for (var i = 0; i < vm.items.inRoom.length; i++) {
+                if(vm.items.inRoom[i].barcode == barcode) {
+                    vm.items.inRoom[i].scanned = true;
+                    itemInRoom = true;
+                    break;
+                }
+            }
+            return itemInRoom;
+        }
     }
 })();

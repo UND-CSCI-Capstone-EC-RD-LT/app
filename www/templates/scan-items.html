@@ -8,7 +8,7 @@
     	</span>
     </ion-nav-buttons>
   	<ion-content ng-show="vm.render" scroll="false">
-  		<div ng-if="vm.scanSettingsSet">
+  		<div ng-if="vm.scanSettingsSet" class="camera-view" ng-click="vm.scanItem()">
     		<h1>Camera View</h1>
     	</div>
     	<div ng-if="!vm.scanSettingsSet">

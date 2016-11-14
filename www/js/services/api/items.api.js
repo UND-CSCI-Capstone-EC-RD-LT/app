@@ -7,11 +7,29 @@
 
     function Items($rootScope, $http, $q, API) {
 
-        function getExample() {
-            return $http.get(API.sailsUrl + 'exampleRoute/exmpleFunction/exampleId')
+        function getItem(itemId) {
+            return $http.get(API.sailsUrl + '/items/' + itemId)
                 .then(function success(res) {
+                    console.log(res);
                     if(res.data) {
-                        return res.data;
+                        return res.data.data;
+                    } else {
+                        return $q.reject(res.data);
+                    }
+                }).catch(function error(reason) {
+                    return $q.reject({
+                        error: 'Error with API request.',
+                        origErr: reason
+                    });
+                });
+        }
+
+        function getItemBarcode(barcode) {
+            return $http.get(API.sailsUrl + '/items/barcode/' + barcode)
+                .then(function success(res) {
+                    console.log(res);
+                    if(res.data) {
+                        return res.data.data;
                     } else {
                         return $q.reject(res.data);
                     }
@@ -65,9 +83,10 @@
 
 
         return {
-            getExample: getExample,
-            updateExample: updateExample,
-            insertExample: insertExample
+            getItem        : getItem,
+            getItemBarcode : getItemBarcode,
+            updateExample  : updateExample,
+            insertExample  : insertExample
         };
     }
 })();
