@@ -70,21 +70,21 @@
         // Retrieves the data from the db
         function getData(isRefresh) {
 
-            getRoomItemsApi(1)
-                .then(function success(items) {
-                    console.log(items);
-                    vm.items.inRoom = items;
-                }).catch(function error() {
-                    // error handling
-                });
-
-            // getDepartmentsApi()
-            //     .then(function success(departments) {
-            //         console.log(departments);
-            //         vm.departments = departments;
+            // getRoomItemsApi(1)
+            //     .then(function success(items) {
+            //         console.log(items);
+            //         vm.items.inRoom = items;
             //     }).catch(function error() {
             //         // error handling
             //     });
+
+            getDepartmentsApi()
+                .then(function success(departments) {
+                    console.log(departments);
+                    vm.departments = departments;
+                }).catch(function error() {
+                    // error handling
+                });
 
         }
 

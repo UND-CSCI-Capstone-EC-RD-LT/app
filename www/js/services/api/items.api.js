@@ -8,7 +8,7 @@
     function Items($rootScope, $http, $q, API) {
 
         function getItem(itemId) {
-            return $http.get(API.sailsUrl + '/items/' + itemId)
+            return $http.get(API.sailsUrl + '/items/getItem/' + itemId)
                 .then(function success(res) {
                     console.log(res);
                     if(res.data) {
@@ -41,12 +41,18 @@
                 });
         }
 
-        function updateExample(example) {
+        function updateItem(item) {
             return $http({
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
-                data: 'example',
-                url: (API.sailsUrlUrl + 'exampleRoute/exampleFunction')
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/form-data; charset=UTF-8' },
+                data: {
+                    description: item.description,
+                    type: item.type.id,
+                    room: item.room.id,
+                    boughtPrice: item.boughtPrice,
+                    currentPrice: item.currentPrice
+                },
+                url: (API.sailsUrl + '/items/' + item.id)
             }).then(function success(res) {
                 if(res.data) {
                     return;
@@ -59,6 +65,23 @@
                     origErr: reason
                 });
             });
+        }
+
+        function getItemTypes() {
+            return $http.get(API.sailsUrl + '/itemtypes/')
+                .then(function success(res) {
+                    console.log(res);
+                    if(res.data) {
+                        return res.data.data;
+                    } else {
+                        return $q.reject(res.data);
+                    }
+                }).catch(function error(reason) {
+                    return $q.reject({
+                        error: 'Error with API request.',
+                        origErr: reason
+                    });
+                });
         }
 
         function insertExample(exampleId, examplePayload) {
@@ -85,7 +108,8 @@
         return {
             getItem        : getItem,
             getItemBarcode : getItemBarcode,
-            updateExample  : updateExample,
+            getItemTypes   : getItemTypes,
+            updateItem     : updateItem,
             insertExample  : insertExample
         };
     }
