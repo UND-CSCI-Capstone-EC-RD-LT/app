@@ -11,13 +11,21 @@
         //// GLOBALS ////
 
         // The edit user modal
-        var editScanSettings = null;
+        var scanSettingsModal = null;
         // The items modal
         var itemsModal = null;
 
         $rootScope.$on('$stateChangeSuccess', function (ev, toState, toParams, fromState, fromParams) {
             if(fromState.name == 'app.edit-item') {
-                vm.showItems();
+                console.log(toParams);
+                getRoomItemsApi(vm.scanSettings.room.id)
+                    .then(function success(items) {
+                        var itemId = fromParams.itemId;
+                        refreshItemsList(items, itemId);
+                        vm.showItems();
+                    }).catch(function error() {
+                        // error handling
+                    });
             }
         });
 
@@ -37,12 +45,6 @@
 
             // for modal data
             vm.modal = {}
-
-            vm.index = {
-                department: null,
-                building: null,
-                room: null
-            };
 
             vm.scanSettingsSet = false;
 
@@ -70,17 +72,8 @@
         // Retrieves the data from the db
         function getData(isRefresh) {
 
-            // getRoomItemsApi(1)
-            //     .then(function success(items) {
-            //         console.log(items);
-            //         vm.items.inRoom = items;
-            //     }).catch(function error() {
-            //         // error handling
-            //     });
-
             getDepartmentsApi()
                 .then(function success(departments) {
-                    console.log(departments);
                     vm.departments = departments;
                 }).catch(function error() {
                     // error handling
@@ -146,19 +139,13 @@
 
         //// VIEW MODEL FUNCTIONS ////
 
-        vm.setScanSettingDepartment = function(departmentIndex) {
-            // setting department scan settings
-            vm.scanSettings.department = vm.departments[departmentIndex];
-
+        vm.setScanSettingDepartment = function() {
             // reset the building and room when new department is selected
             vm.scanSettings.building = null;
-            vm.index.building = null;
             vm.scanSettings.room = null;
-            vm.index.room = null;
 
             getDepartmentBuildingsApi(vm.scanSettings.department.id)
                 .then(function success(buildings) {
-                    console.log(buildings);
                     vm.buildings = buildings;
                 }).catch(function error() {
                     // error handling
@@ -166,83 +153,49 @@
         }
 
         vm.setScanSettingBuilding = function(buildingIndex) {
-            // setting building scan settings
-            vm.scanSettings.building = vm.buildings[buildingIndex];
-
             // reset the room when new building is selected
             vm.scanSettings.room = null;
-            vm.index.room = null;
+
             getBuildingRoomsApi(vm.scanSettings.building.id)
                 .then(function success(rooms) {
-                    console.log(rooms);
                     vm.rooms = rooms;
                 }).catch(function error() {
                     // error handling
                 });
         }
 
-        vm.setScanSettingRoom = function(roomIndex) {
-            // setting room scan settings
-            vm.scanSettings.room = vm.rooms[roomIndex];
-        }
-
-        vm.editScanSettings = function() {
-            if(!editScanSettings) {
+        vm.showScanSettings = function() {
+            if(!scanSettingsModal) {
                 $ionicModal.fromTemplateUrl('templates/modals/scan-settings.html', {
                     scope: $scope,
                     animation: 'slide-in-up' // maybe use slide-in-down if it works on mobile
                 }).then(function success(modal) {
-                    editScanSettings = modal;
-
-                    $scope.$on('modal.hidden', function() {
-                        clearScanSettingsModalData();
-                    });
-
-                    addScanSettingsModalData()
-                        // .then(function success() {
-                            editScanSettings.show();
-                        // });
+                    scanSettingsModal = modal;
+                    scanSettingsModal.show();
                 });
             } else {
-                addScanSettingsModalData()
-                    // .then(function success() {
-                        editScanSettings.show();
-                    // });
+                scanSettingsModal.show();
             }
         };
 
-        // Cancel any edits made to the user info and close the modal
-        vm.cancelEditScanSettings = function() {
+        vm.hideScanSettings = function() {
             hideScanSettingsModal();
-        };
-
-        // Confirm any edits made to the scan settings and close the modal
-        vm.confirmEditScanSettings = function(user) {
-            // if(isValidEmail(user.email) && isValidCellNumber(user.cellNumber)) {
-                // updateUserApi(user)
-                //     .then(function success() {
-                        hideScanSettingsModal();
-                    // });
-            // }
         };
 
         vm.newScan = function() {
             hideScanSettingsModal();
             onEnter();
-            // vm.scanSettingsSet = false;
         }
 
         vm.confirmScanSettings = function() {
-            console.log(vm.scanSettings);
             getRoomItemsApi(vm.scanSettings.room.id)
                 .then(function success(items) {
-                    console.log(items);
                     vm.items.inRoom = items;
+                    vm.scanSettingsSet = true;
+                    vm.viewTitle = 'Scan Items';
                 }).catch(function error() {
                     // error handling
                 });
-            vm.scanSettingsSet = true;
-            vm.viewTitle = 'Scan Items';
         };
 
         vm.showItems = function() {
@@ -252,11 +205,6 @@
                     animation: 'slide-in-up' // maybe use slide-in-down if it works on mobile
                 }).then(function success(modal) {
                     itemsModal = modal;
-
-                    $scope.$on('modal.hidden', function() {
-                        clearItemsModalData();
-                    });
-
                     itemsModal.show();
                 });
             } else {
@@ -264,7 +212,6 @@
             }
         };
 
-        // Cancel any edits made to the user info and close the modal
         vm.hideItems = function() {
             hideItemsModal();
         };
@@ -276,7 +223,7 @@
 
         vm.scanItem = function() {
             console.log('Scanning Item');
-            var barcode = 12348;
+            var barcode = 12345;
             if(!checkItem(barcode)) {
                 console.log('Check if item exists');
                 getItemBarcodeApi(barcode)
@@ -299,49 +246,11 @@
 
         //// MODAL FUNCTIONS ////
 
-        // Copies data to the edit user modal
-        function addScanSettingsModalData() {
-            angular.extend(vm.modal, {
-                departments: [],
-                buildings: [],
-                rooms: []
-            });
-
-            // Retrieves the possible options
-            for (var i = 0; i < 3; i++) {
-                vm.modal.departments.push({
-                    name: 'Department ' + (i+1)
-                });
-                vm.modal.buildings.push({
-                    name: 'Building ' + (i+1)
-                });
-                vm.modal.rooms.push({
-                    name: 'Room ' + (i+1)
-                });
-            }
-        }
-
-        // Clears the edit user modal data and resets its form
-        function clearScanSettingsModalData() {
-
-            // Necessary to apply the animations within $setUntouched, but wait for the next digest cycle
-            $timeout(function() {
-                $scope.$apply(vm.editScanSettingsForm.$setUntouched());
-            });
-            vm.modal = {};
-        }
-
         // Hides the edit user modal
         function hideScanSettingsModal() {
-            if(editScanSettings){
-                editScanSettings.hide();
+            if(scanSettingsModal){
+                scanSettingsModal.hide();
             }
-            
-        }
-
-        // Clears the edit user modal data and resets its form
-        function clearItemsModalData() {
-
         }
 
         // Hides the edit user modal
@@ -354,7 +263,7 @@
         function checkItem(barcode){
             var itemInRoom = false
             console.log(vm.items.inRoom);
-            for (var i = 0; i < vm.items.inRoom.length; i++) {
+            for(var i = 0; i < vm.items.inRoom.length; i++) {
                 if(vm.items.inRoom[i].barcode == barcode) {
                     vm.items.inRoom[i].scanned = true;
                     itemInRoom = true;
@@ -362,6 +271,31 @@
                 }
             }
             return itemInRoom;
+        }
+
+        function refreshItemsList(items, checkItem) {
+            var index = -1;
+            for(var i = 0; i < items.length; i++) {
+                if(items[i].id == checkItem) {
+                    items[i].scanned = true;
+                    vm.items.inRoom.push(items[i]);
+
+                    index = indexOfItem(vm.items.inWrongRoom, items[i]);
+                    if(index > -1) {
+                        vm.items.inWrongRoom.splice(index,1);
+                    }
+                    break;
+                }            
+            }
+        }
+
+        function indexOfItem(array, item) {
+            for (var i = 0; i < array.length; i++) {
+                if(array[i].id === item.id) {
+                    return i;
+                }
+            }
+            return -1;
         }
     }
 })();

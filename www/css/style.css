@@ -57,7 +57,7 @@
     font-weight: 600;
 }
 
-.Edit-Item .item-note {
+.Scan-Settings .item-note, .Edit-Item .item-note {
     max-width: 50%;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -65,7 +65,7 @@
     color: #444444;
 }
 
-.Edit-Item select{
+.Scan-Items select, .Edit-Item select{
     font-size: 16px;
     color: #444444;
 }

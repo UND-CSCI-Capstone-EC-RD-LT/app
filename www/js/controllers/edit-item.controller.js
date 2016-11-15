@@ -8,9 +8,9 @@
     function EditItemController($timeout, $state, $stateParams, $q, Items, Departments, Buildings, Rooms) {
         var vm = this;
 
-       $timeout(function() {
+       // $timeout(function() {
             onEnter();
-        }, 1000);
+        // }, 1000);
 
         //// INITIALIZATION FUNCTIONS ////
 
@@ -22,6 +22,8 @@
             vm.title = '';
 
             vm.item = {};
+
+            vm.itemCopy = {};
 
             vm.departments = [];
             vm.buildings = [];
@@ -190,10 +192,15 @@
         //// VIEW MODEL FUNCTIONS ////
 
         vm.toggleEditItem = function() {
+            // vm.itemCopy = angular.copy(vm.item);
             vm.editItem = true;
         }
 
         vm.cancelEditItem = function() {
+            // console.log(vm.item);
+            // console.log(vm.itemCopy);
+            // vm.item = vm.itemCopy;
+            // console.log(vm.item);
             vm.editItem = false;
         }
 

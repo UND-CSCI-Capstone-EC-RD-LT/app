@@ -29,7 +29,7 @@
                 .then(function success(res) {
                     console.log(res);
                     if(res.data) {
-                        return res.data.data;
+                        return res.data.data[0];
                     } else {
                         return $q.reject(res.data);
                     }
