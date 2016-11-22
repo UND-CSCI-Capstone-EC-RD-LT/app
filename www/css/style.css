@@ -21,6 +21,11 @@
 	font-size: 32px;
 }
 
+.Scan-Items select, .Edit-Item select, .Search-Items select{
+    font-size: 16px;
+    color: #444444;
+}
+
 .Items-Modal ion-header-bar:hover {
 	cursor: pointer;
 }
@@ -48,7 +53,7 @@
 }
 
 /* The properties to animate for the inner content (see above) */
-.Search-Items .hidden {
+.View-Items .hidden {
     height: 0;
     margin: 0;
     padding-top: 0;
@@ -64,3 +69,4 @@
     bottom: 0;
     font-weight: 600;
 }
+

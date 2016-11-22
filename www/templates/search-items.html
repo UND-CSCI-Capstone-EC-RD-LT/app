@@ -2,32 +2,24 @@
   <ion-content ng-show="vm.render">
   	<form name="vm.searchFilterForm" novalidate>
 	    <ion-list>
-	    	<ion-item class="item-divider">
-    			Filter
-  			</ion-item>
 			<!-- Department -->
-		    <label class="item item-input item-select">
-		        <h2 class="input-label">Department</h2>
-		        <select ng-model="vm.search.department" ng-required="true" ng-change="vm.getDepartmentBuildings(vm.search.department)">
-		            <option ng-repeat="department in vm.departments" value="{{department.id}}">{{ department.name }}</option>
-		        </select>
-		    </label>
+            <label class="item item-select item-input">
+                <h2 class="input-label">Department</h2>
+                <select ng-options="department.name for department in vm.departments" ng-model="vm.search.department" ng-change="vm.setDepartment()" ng-required="true"></select>
+            </label>
 
 		    <!-- Building -->
-		    <label class="item item-input item-select">
-		        <h2 class="input-label">Building</h2>
-		        <select ng-model="vm.search.building" ng-change="vm.getBuildingRooms(vm.search.building)" ng-disabled="!vm.search.department">
-		            <option ng-repeat="building in vm.buildings" value="{{building.id}}">{{ building.name }}</option>
-		        </select>
-		    </label>
+		    <label class="item item-select item-input">
+                <h2 class="input-label">Building</h2>
+                <select ng-options="building.name for building in vm.buildings" ng-model="vm.search.building" ng-change="vm.setBuilding()" ng-disabled="!vm.search.department"></select>
+            </label>
 
 		    <!-- Room -->
-		    <label class="item item-input item-select">
-		        <h2 class="input-label">Room</h2>
-		        <select ng-model="vm.search.room" ng-disabled="!vm.search.building">
-		            <option ng-repeat="room in vm.rooms" value="{{room.id}}">{{ room.number }}</option>
-		        </select>
-		    </label>
+		    <label class="item item-select item-input">
+                <h2 class="input-label">Room</h2>
+                    <select ng-options="room.number for room in vm.rooms" ng-model="vm.search.room" ng-disabled="!vm.search.building"></select>
+            </label>
+
 		</ion-list>
 	</form>
 	<button class="button button-full button-positive search" ng-disabled="!vm.searchFilterForm.$valid" ng-click="vm.searchItems()">Search</button>

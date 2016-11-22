@@ -49,7 +49,7 @@
                 }
             })
             .state('app.search-items.view-items', {
-                url: '/view-items',
+                url: '/view-items/:departmentId/:buildingId/:roomId',
                 views: {
                     'menuContent@app': {
                         templateUrl: 'templates/view-items.html',

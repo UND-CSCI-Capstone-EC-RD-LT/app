@@ -17,7 +17,6 @@
         //// INITIALIZATION FUNCTIONS ////
 
         function onEnter(isRefresh) {
-            console.log('SearchItemsController');
             vm.render = false;
 
             vm.accordion = {
@@ -45,7 +44,6 @@
 
             getDepartmentsApi()
                 .then(function success(departments) {
-                    console.log(departments);
                     vm.departments = departments;
                 }).catch(function error() {
                     // error handling
@@ -96,23 +94,21 @@
 
         //// VIEW MODEL FUNCTIONS ////
 
-        vm.getDepartmentBuildings = function(departmentId) {
+        vm.setDepartment = function() {
             vm.search.building = null;
             vm.search.room = null;
-            getDepartmentBuildingsApi(departmentId)
+            getDepartmentBuildingsApi(vm.search.department.id)
                 .then(function success(buildings) {
-                    console.log(buildings);
                     vm.buildings = buildings;
                 }).catch(function error() {
                     // error handling
                 });
         }
 
-        vm.getBuildingRooms = function(buildingId) {
+        vm.setBuilding = function() {
             vm.search.room = null;
-            getBuildingRoomsApi(buildingId)
+            getBuildingRoomsApi(vm.search.building.id)
                 .then(function success(rooms) {
-                    console.log(rooms);
                     vm.rooms = rooms;
                 }).catch(function error() {
                     // error handling
@@ -120,8 +116,11 @@
         }
 
         vm.searchItems = function() {
-            console.log(vm.search);
-            $state.go('.view-items');
+            $state.go('.view-items', {
+                departmentId: vm.search.department.id,
+                buildingId: vm.search.building ? vm.search.building.id : 0,
+                roomId: vm.search.room ? vm.search.room.id : 0
+            });
         }
 
         //// END VIEW MODEL FUNCTIONS ////

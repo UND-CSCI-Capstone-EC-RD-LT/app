@@ -10,9 +10,9 @@
 
         // DEVELOPMENT ONLY
         // WAITING SO THE JWT TOKEN IS SET BEFORE CALLING
-        $timeout(function() {
+        // $timeout(function() {
             onEnter();
-        }, 1000);
+        // }, 1000);
 
         //// INITIALIZATION FUNCTIONS ////
 
@@ -23,6 +23,21 @@
             vm.accordion = {
                 isOpen: false
             };
+
+            vm.itemTypes = [
+                {
+                    name: 'Computers',
+                    items: ['item 1', 'item 2', 'item 3']
+                }, {
+                    name: 'Desks',
+                    items: ['item 4', 'item 5', 'item 6']
+                }, {
+                    name: 'White Boards',
+                    items: ['item 7', 'item 8', 'item 9', 'item 10']
+                }
+            ]
+
+            
 
             vm.render = true;
 
@@ -37,8 +52,8 @@
         //// END INITIALIZATION FUNCTIONS ////
 
         // Opens an organization accordion
-        vm.toggleItemTypeOpen = function() {
-            vm.accordion.isOpen = !vm.accordion.isOpen;
+        vm.toggleItemTypeOpen = function(type) {
+           type.isOpen = !type.isOpen;
         };
 
         //// API FUNCTIONS ////
