@@ -1,17 +1,18 @@
 <ion-view view-title="{{vm.viewTitle}}" class="Scan-Items">
 	<ion-nav-buttons side="right">
-		<span ng-if="!vm.scanSettingsSet">
-			<a ng-if="!vm.scanSettingsSet" class="button button-icon icon ion-checkmark" ng-click="vm.confirmScanSettings()" ng-disabled="vm.scanSettingsForm.$invalid"></a>
+		<span ng-if="!vm.scanSettings.set">
+			<a ng-if="!vm.scanSettings.set" class="button button-icon icon ion-checkmark" ng-click="vm.confirmScanSettings()" ng-disabled="vm.scanSettingsForm.$invalid"></a>
 		</span>
-        <span ng-if="vm.scanSettingsSet">
+        <span ng-if="vm.scanSettings.set">
         	<a class="button button-icon icon ion-gear-a" ng-click="vm.showScanSettings()"></a>
     	</span>
     </ion-nav-buttons>
   	<ion-content ng-show="vm.render" scroll="false">
-  		<div ng-if="vm.scanSettingsSet" class="camera-view" ng-click="vm.scanItem()">
+      <input ng-if="vm.scanSettings.set" type="text" name="barcode" placeholder="Enter Barcode" ng-model="vm.barcode" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  		<div ng-if="vm.scanSettings.set" class="camera-view" ng-click="vm.scanItem()">
     		<h1>Camera View</h1>
     	</div>
-    	<div ng-if="!vm.scanSettingsSet">
+    	<div ng-if="!vm.scanSettings.set">
     		<form name="vm.scanSettingsForm" novalidate>
 	            <ion-list>
 
@@ -46,7 +47,7 @@
 	        </form>
 	    </div>
   	</ion-content>
-  	<ion-footer-bar ng-if="vm.scanSettingsSet && vm.scanSettings.scanType == 'Batch'" ng-click="vm.showItems()">
+  	<ion-footer-bar ng-if="vm.scanSettings.set && vm.scanSettings.scanType == 'Batch'" ng-click="vm.showItems()">
   		<div class="items">
   			<i class="icon ion-ios-arrow-up"></i>
   			<span>Items</span>

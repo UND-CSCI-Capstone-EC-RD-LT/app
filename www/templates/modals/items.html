@@ -36,8 +36,9 @@
                 <div ng-if="vm.items.newItems.length" class="item item-divider">
 					New Items
 				</div>
-            	<ion-item ng-repeat="item in vm.items.newItems" ng-click="vm.editItem(item)">
+            	<ion-item ng-repeat="item in vm.items.newItems" class="item-icon-right" ng-click="vm.editItem(item)">
                     <h2>{{ item.barcode }}</h2>
+                    <i ng-if="item.scanned" class="icon ion-checkmark-circled"></i>
                 </ion-item>
                 
             </ion-list>

@@ -15,9 +15,9 @@
         // The items modal
         var itemsModal = null;
 
+        // Returning to scan state from edit state and refreshing item list for changes
         $rootScope.$on('$stateChangeSuccess', function (ev, toState, toParams, fromState, fromParams) {
             if(fromState.name == 'app.edit-item') {
-                console.log(toParams);
                 getRoomItemsApi(vm.scanSettings.room.id)
                     .then(function success(items) {
                         var itemId = fromParams.itemId;
@@ -46,13 +46,14 @@
             // for modal data
             vm.modal = {}
 
-            vm.scanSettingsSet = false;
+            vm.barcode = null;
 
             vm.scanSettings = {
                 department: null,
                 building: null,
                 room: null,
-                scanType: 'Batch'
+                scanType: 'Batch',
+                set: false
             };
 
             vm.items = {
@@ -135,6 +136,17 @@
                 });
         }
 
+        function createItemApi(item) {
+            return Items.createItem(item)
+                .then(function success(item) {
+                    return item;
+                })
+                .catch(function error(reason) {
+                    //error handling
+                    return $q.reject();
+                });
+        }
+
         //// END API FUNCTIONS ////
 
         //// VIEW MODEL FUNCTIONS ////
@@ -191,7 +203,7 @@
             getRoomItemsApi(vm.scanSettings.room.id)
                 .then(function success(items) {
                     vm.items.inRoom = items;
-                    vm.scanSettingsSet = true;
+                    vm.scanSettings.set = true;
                     vm.viewTitle = 'Scan Items';
                 }).catch(function error() {
                     // error handling
@@ -202,7 +214,7 @@
             if(!itemsModal) {
                 $ionicModal.fromTemplateUrl('templates/modals/items.html', {
                     scope: $scope,
-                    animation: 'slide-in-up' // maybe use slide-in-down if it works on mobile
+                    animation: 'slide-in-up'
                 }).then(function success(modal) {
                     itemsModal = modal;
                     itemsModal.show();
@@ -222,19 +234,30 @@
         }
 
         vm.scanItem = function() {
-            console.log('Scanning Item');
-            var barcode = 12345;
+            var barcode = vm.barcode;
+            vm.barcode = null;
+            // Check if the item scanned is already in the room or not
             if(!checkItem(barcode)) {
-                console.log('Check if item exists');
+                // Check to see if the item has already been created or not
                 getItemBarcodeApi(barcode)
                     .then(function success(item) {
-                        console.log(item);
-                        if(item.barcode) {
+                        // Item has already been created but is currently in the wrong room or creating new item
+                        if(item) {
                             vm.items.inWrongRoom.push(item);
-                        } else {
-                            vm.items.newItems.push({
-                                barcode: barcode
-                            })
+                        } else { 
+                            var item = {
+                                barcode: barcode,
+                                roomId: vm.scanSettings.room.id,
+                                creator: $rootScope.user.id
+                            }
+                            // Create basic item with new barcode
+                            createItemApi(item)
+                                .then(function success(item) {
+                                    item.scanned = true;
+                                    vm.items.newItems.push(item)
+                                }).catch(function error() {
+                                    // error handling
+                                });
                         }
                     }).catch(function error() {
                         // error handling
@@ -262,7 +285,6 @@
 
         function checkItem(barcode){
             var itemInRoom = false
-            console.log(vm.items.inRoom);
             for(var i = 0; i < vm.items.inRoom.length; i++) {
                 if(vm.items.inRoom[i].barcode == barcode) {
                     vm.items.inRoom[i].scanned = true;
@@ -277,12 +299,12 @@
             var index = -1;
             for(var i = 0; i < items.length; i++) {
                 if(items[i].id == checkItem) {
-                    items[i].scanned = true;
-                    vm.items.inRoom.push(items[i]);
-
                     index = indexOfItem(vm.items.inWrongRoom, items[i]);
                     if(index > -1) {
                         vm.items.inWrongRoom.splice(index,1);
+                        items[i].scanned = true;
+                        vm.items.inRoom.push(items[i]);
+                        break;
                     }
                     break;
                 }            

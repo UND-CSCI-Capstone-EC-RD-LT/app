@@ -34,11 +34,12 @@
 
         // Retrieves the data from the db
         function getData(isRefresh) {
+            console.log($stateParams.itemId);
             getItemApi($stateParams.itemId)
                 .then(function success(item) {
                     vm.item = item;
                     
-                    vm.title = 'M-'+vm.item.barcode
+                    vm.title = 'M'+vm.item.barcode
 
                     var d1 = $q.defer();
                     var d2 = $q.defer();
@@ -196,6 +197,7 @@
             vm.editItem = true;
         }
 
+        // TODO
         vm.cancelEditItem = function() {
             // console.log(vm.item);
             // console.log(vm.itemCopy);
