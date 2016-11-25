@@ -9,7 +9,7 @@
         var vm = this;
 
        // $timeout(function() {
-            onEnter();
+        onEnter();
         // }, 1000);
 
         //// INITIALIZATION FUNCTIONS ////
@@ -29,17 +29,16 @@
             vm.buildings = [];
             vm.rooms = [];
 
-            getData(isRefresh)
+            getData(isRefresh);
         }
 
         // Retrieves the data from the db
         function getData(isRefresh) {
-            console.log($stateParams.itemId);
             getItemApi($stateParams.itemId)
                 .then(function success(item) {
                     vm.item = item;
-                    
-                    vm.title = 'M'+vm.item.barcode
+
+                    vm.title = vm.item.barcode;
 
                     var d1 = $q.defer();
                     var d2 = $q.defer();
@@ -195,7 +194,7 @@
         vm.toggleEditItem = function() {
             // vm.itemCopy = angular.copy(vm.item);
             vm.editItem = true;
-        }
+        };
 
         // TODO
         vm.cancelEditItem = function() {
@@ -204,7 +203,7 @@
             // vm.item = vm.itemCopy;
             // console.log(vm.item);
             vm.editItem = false;
-        }
+        };
 
         vm.updateItem = function(form) {
             if(form.$dirty) {
@@ -213,9 +212,9 @@
                         vm.editItem = false;
                     });
             } else {
-                vm.editItem = false; 
-            } 
-        }
+                vm.editItem = false;
+            }
+        };
 
         vm.setItemDepartment = function() {
             // reset the building and room when new department is selected
@@ -228,7 +227,7 @@
                 }).catch(function error() {
                     // error handling
                 });
-        }
+        };
 
         vm.setItemBuilding = function() {
             // reset the room when new building is selected
@@ -240,7 +239,7 @@
                 }).catch(function error() {
                     // error handling
                 });
-        }
+        };
 
         //// END VIEW MODEL FUNCTIONS ////
     }

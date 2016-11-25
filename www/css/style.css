@@ -2,49 +2,17 @@
 	cursor: pointer;
 }
 
-.Scan-Items ion-footer-bar:hover {
-	cursor: pointer;
+.Scan-Items ion-footer-bar {
+	padding: 0;
 }
 
-.Scan-Items .items {
-	width: 100%;
-	bottom: 10px;
-	line-height: 32px;
-	position: relative;
-	font-size: 17px;
-	text-align: center;
+.Scan-Items .scan-btn {
+	margin: 0;
+	font-size: 18px;
+	font-weight: 600;
 }
 
-.Scan-Items .items .ion-ios-arrow-up {
-	display: block;
-	height: 17px;
-	font-size: 32px;
-}
-
-.Scan-Items .camera-view {
-	height: 100%;
-}
-
-.Items-Modal ion-header-bar:hover {
-	cursor: pointer;
-}
-
-.Items-Modal .items {
-	width: 100%;
-	bottom: 10px;
-	line-height: 27px;
-	position: relative;
-	font-size: 17px;
-	text-align: center;
-}
-
-.Items-Modal .items .ion-ios-arrow-down {
-	display: block;
-	height: 17px;
-	font-size: 32px;
-}
-
-.Items-Modal .ion-checkmark-circled {
+.Scan-Items .ion-checkmark-circled {
 	color: #009A44;
 }
 
@@ -65,9 +33,13 @@
     color: #444444;
 }
 
-.Scan-Items select, .Edit-Item select{
+.Scan-Items select, .Edit-Item select {
     font-size: 16px;
     color: #444444;
+}
+
+.Scan-Items select:disabled, .Edit-Item select:disabled {
+	pointer-events: none;
 }
 
 .Edit-Item select:disabled{
@@ -75,27 +47,27 @@
     padding-right: 16px;
 }
 
-.Edit-Item .item .parent-not-set{
+.Edit-Item .item .parent-not-set {
     z-index: 0;
 }
 
-.Edit-Item .item-input input{
+.Edit-Item .item-input input {
     text-align: right;
     font-size: 16px;
     color: #444444;
 }
 
-.Edit-Item .item-input input:disabled{
+.Edit-Item .item-input input:disabled {
     background-color: transparent;
 }
 
-.Edit-Item .item-input textarea{
+.Edit-Item .item-input textarea {
     background-color: transparent;
     font-size: 16px;
     color: #444444;
 }
 
-.Edit-Item .item-input textarea:disabled{
+.Edit-Item .item-input textarea:disabled {
     background-color: transparent;
 }
 

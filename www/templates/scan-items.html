@@ -7,11 +7,43 @@
         	<a class="button button-icon icon ion-gear-a" ng-click="vm.showScanSettings()"></a>
     	</span>
     </ion-nav-buttons>
-  	<ion-content ng-show="vm.render" scroll="false">
-      <input ng-if="vm.scanSettings.set" type="text" name="barcode" placeholder="Enter Barcode" ng-model="vm.barcode" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-  		<div ng-if="vm.scanSettings.set" class="camera-view" ng-click="vm.scanItem()">
-    		<h1>Camera View</h1>
+  	<ion-content ng-show="vm.render">
+        <!-- <input ng-if="vm.manualScan" type="text" name="barcode" placeholder="Enter Barcode" ng-model="vm.barcode" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"> -->
+        <!-- Room Item List -->
+  		<div ng-if="vm.scanSettings.set">
+    		<ion-list class="modal-item">
+
+                <!-- In Room -->
+                <div class="item item-divider">
+                    In Room
+                </div>
+                <ion-item ng-if="!vm.items.inRoom.length">
+                    <h2>No items in room</h2>
+                </ion-item>
+                <ion-item ng-repeat="item in vm.items.inRoom" class="item-icon-right" ng-click="vm.editItem(item)">
+                    <h2>{{ item.barcode }}</h2>
+                    <i ng-if="item.scanned" class="icon ion-checkmark-circled"></i>
+                </ion-item>
+
+                <!-- In Wrong Room -->
+                <div ng-if="vm.items.inWrongRoom.length" class="item item-divider">
+                    In Wrong Room
+                </div>
+                <ion-item ng-repeat="item in vm.items.inWrongRoom" ng-click="vm.editItem(item)">
+                    <h2>{{ item.barcode }}</h2>
+                </ion-item>
+
+                <!-- New Items -->
+                <div ng-if="vm.items.newItems.length" class="item item-divider">
+                    New Items
+                </div>
+                <ion-item ng-repeat="item in vm.items.newItems" class="item-icon-right" ng-click="vm.editItem(item)">
+                    <h2>{{ item.barcode }}</h2>
+                    <i ng-if="item.scanned" class="icon ion-checkmark-circled"></i>
+                </ion-item>
+            </ion-list>
     	</div>
+        <!-- Set Scan Settings -->
     	<div ng-if="!vm.scanSettings.set">
     		<form name="vm.scanSettingsForm" novalidate>
 	            <ion-list>
@@ -47,11 +79,8 @@
 	        </form>
 	    </div>
   	</ion-content>
-  	<ion-footer-bar ng-if="vm.scanSettings.set && vm.scanSettings.scanType == 'Batch'" ng-click="vm.showItems()">
-  		<div class="items">
-  			<i class="icon ion-ios-arrow-up"></i>
-  			<span>Items</span>
-  		</div>
+  	<ion-footer-bar ng-if="vm.scanSettings.set && vm.scanSettings.scanType == 'Batch'">
+  		<button class="button button-full button-positive scan-btn" ng-click="vm.startScan()">Scan</button>
 	</ion-footer-bar>
 </ion-view>
 

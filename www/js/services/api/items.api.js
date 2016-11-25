@@ -92,7 +92,6 @@
         function getItemTypes() {
             return $http.get(API.sailsUrl + '/itemtypes/')
                 .then(function success(res) {
-                    console.log(res);
                     if(res.data) {
                         return res.data.data;
                     } else {

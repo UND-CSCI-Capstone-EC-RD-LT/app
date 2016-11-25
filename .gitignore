@@ -1,6 +1,7 @@
 node_modules/
 platforms/
 plugins/
+resources/ios
 www/lib/
 www/dist/
 

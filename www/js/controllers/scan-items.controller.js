@@ -3,9 +3,9 @@
 
     angular
         .module('app.controllers')
-        .controller('ScanItemsController', ['$rootScope', '$scope', '$state', '$q', '$timeout', '$ionicModal', 'Items', 'Departments', 'Buildings', 'Rooms', ScanItemsController]);
+        .controller('ScanItemsController', ['$rootScope', '$scope', '$window', '$state', '$q', '$timeout', '$ionicModal', 'Items', 'Departments', 'Buildings', 'Rooms', ScanItemsController]);
 
-    function ScanItemsController($rootScope, $scope, $state, $q, $timeout, $ionicModal, Items, Departments, Buildings, Rooms) {
+    function ScanItemsController($rootScope, $scope, $window, $state, $q, $timeout, $ionicModal, Items, Departments, Buildings, Rooms) {
         var vm = this;
 
         //// GLOBALS ////
@@ -22,7 +22,6 @@
                     .then(function success(items) {
                         var itemId = fromParams.itemId;
                         refreshItemsList(items, itemId);
-                        vm.showItems();
                     }).catch(function error() {
                         // error handling
                     });
@@ -43,9 +42,6 @@
 
             vm.viewTitle = 'Set Scan Settings';
 
-            // for modal data
-            vm.modal = {}
-
             vm.barcode = null;
 
             vm.scanSettings = {
@@ -60,12 +56,12 @@
                 inRoom: [],
                 inWrongRoom: [],
                 newItems: []
-            }
+            };
 
             vm.departments = [];
             vm.buildings = [];
             vm.rooms = [];
-            
+
             vm.render = true;
             getData(isRefresh);
         }
@@ -162,7 +158,7 @@
                 }).catch(function error() {
                     // error handling
                 });
-        }
+        };
 
         vm.setScanSettingBuilding = function(buildingIndex) {
             // reset the room when new building is selected
@@ -174,7 +170,7 @@
                 }).catch(function error() {
                     // error handling
                 });
-        }
+        };
 
         vm.showScanSettings = function() {
             if(!scanSettingsModal) {
@@ -197,7 +193,7 @@
         vm.newScan = function() {
             hideScanSettingsModal();
             onEnter();
-        }
+        };
 
         vm.confirmScanSettings = function() {
             getRoomItemsApi(vm.scanSettings.room.id)
@@ -210,60 +206,13 @@
                 });
         };
 
-        vm.showItems = function() {
-            if(!itemsModal) {
-                $ionicModal.fromTemplateUrl('templates/modals/items.html', {
-                    scope: $scope,
-                    animation: 'slide-in-up'
-                }).then(function success(modal) {
-                    itemsModal = modal;
-                    itemsModal.show();
-                });
-            } else {
-                itemsModal.show();
-            }
-        };
-
-        vm.hideItems = function() {
-            hideItemsModal();
+        vm.startScan = function(){
+            startScan();
         };
 
         vm.editItem = function(item) {
-            hideItemsModal();
             $state.go('^.edit-item', {itemId: item.id});
-        }
-
-        vm.scanItem = function() {
-            var barcode = vm.barcode;
-            vm.barcode = null;
-            // Check if the item scanned is already in the room or not
-            if(!checkItem(barcode)) {
-                // Check to see if the item has already been created or not
-                getItemBarcodeApi(barcode)
-                    .then(function success(item) {
-                        // Item has already been created but is currently in the wrong room or creating new item
-                        if(item) {
-                            vm.items.inWrongRoom.push(item);
-                        } else { 
-                            var item = {
-                                barcode: barcode,
-                                roomId: vm.scanSettings.room.id,
-                                creator: $rootScope.user.id
-                            }
-                            // Create basic item with new barcode
-                            createItemApi(item)
-                                .then(function success(item) {
-                                    item.scanned = true;
-                                    vm.items.newItems.push(item)
-                                }).catch(function error() {
-                                    // error handling
-                                });
-                        }
-                    }).catch(function error() {
-                        // error handling
-                    });
-            }
-        }
+        };
 
         //// END VIEW MODEL FUNCTIONS ////
 
@@ -284,7 +233,7 @@
         //// END MODAL FUNCTIONS ////
 
         function checkItem(barcode){
-            var itemInRoom = false
+            var itemInRoom = false;
             for(var i = 0; i < vm.items.inRoom.length; i++) {
                 if(vm.items.inRoom[i].barcode == barcode) {
                     vm.items.inRoom[i].scanned = true;
@@ -292,6 +241,7 @@
                     break;
                 }
             }
+            $scope.$apply();
             return itemInRoom;
         }
 
@@ -307,7 +257,7 @@
                         break;
                     }
                     break;
-                }            
+                }
             }
         }
 
@@ -318,6 +268,58 @@
                 }
             }
             return -1;
+        }
+
+        function startScan() {
+            if($window.cordova) {
+                cordova.plugins.barcodeScanner.scan(
+                    function (result) {
+                        if(!result.cancelled){
+                            saveScan(result.text);
+                        }
+                    },
+                    function (error) {
+                        alert("Scanning failed: " + error);
+                    },
+                    {
+                        "preferFrontCamera" : false, // iOS and Android
+                        "showFlipCameraButton" : false, // iOS and Android
+                        "prompt" : "Place a barcode inside the scan area", // supported on Android only
+                    }
+                );
+            } else {
+                // Do something here
+            }
+        }
+
+        function saveScan(barcode) {
+            // Check if the item scanned is already in the room or not
+            if(!checkItem(barcode)) {
+                // Check to see if the item has already been created or not
+                getItemBarcodeApi(barcode)
+                    .then(function success(item) {
+                        // Item has already been created but is currently in the wrong room or creating new item
+                        if(item) {
+                            vm.items.inWrongRoom.push(item);
+                        } else {
+                            item = {
+                                barcode: barcode,
+                                roomId: vm.scanSettings.room.id,
+                                creator: $rootScope.user.id
+                            };
+                            // Create basic item with new barcode
+                            createItemApi(item)
+                                .then(function success(item) {
+                                    item.scanned = true;
+                                    vm.items.newItems.push(item);
+                                }).catch(function error() {
+                                    // error handling
+                                });
+                        }
+                    }).catch(function error() {
+                        // error handling
+                    });
+            }
         }
     }
 })();
