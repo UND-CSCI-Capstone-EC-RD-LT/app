@@ -18,13 +18,18 @@
         // Returning to scan state from edit state and refreshing item list for changes
         $rootScope.$on('$stateChangeSuccess', function (ev, toState, toParams, fromState, fromParams) {
             if(fromState.name == 'app.edit-item') {
-                getRoomItemsApi(vm.scanSettings.room.id)
-                    .then(function success(items) {
-                        var itemId = fromParams.itemId;
-                        refreshItemsList(items, itemId);
-                    }).catch(function error() {
-                        // error handling
-                    });
+                if(vm.scanSettings.scanType == 'Single Item') {
+                    resetScanSettings();
+                } else {
+                    getRoomItemsApi(vm.scanSettings.room.id)
+                        .then(function success(items) {
+                            var itemId = fromParams.itemId;
+                            refreshItemsList(items, itemId);
+                        }).catch(function error() {
+                            // error handling
+                        });  
+                }
+                
             }
         });
 
@@ -40,7 +45,7 @@
             console.log('ScanItemsController');
             vm.render = false;
 
-            vm.viewTitle = 'Set Scan Settings';
+            vm.title = 'Set Scan Settings';
 
             vm.barcode = null;
 
@@ -61,6 +66,11 @@
             vm.departments = [];
             vm.buildings = [];
             vm.rooms = [];
+
+            vm.manualScan = false;
+            if(!$window.cordova) {
+                vm.manualScan = true;
+            }
 
             vm.render = true;
             getData(isRefresh);
@@ -192,7 +202,7 @@
 
         vm.newScan = function() {
             hideScanSettingsModal();
-            onEnter();
+            resetScanSettings();
         };
 
         vm.confirmScanSettings = function() {
@@ -200,7 +210,10 @@
                 .then(function success(items) {
                     vm.items.inRoom = items;
                     vm.scanSettings.set = true;
-                    vm.viewTitle = 'Scan Items';
+                    vm.title = 'Scan Items';
+                    if(vm.scanSettings.scanType == 'Single Item' && $window.cordova) {
+                        startScan();
+                    }
                 }).catch(function error() {
                     // error handling
                 });
@@ -233,16 +246,15 @@
         //// END MODAL FUNCTIONS ////
 
         function checkItem(barcode){
-            var itemInRoom = false;
+            var item = null;
             for(var i = 0; i < vm.items.inRoom.length; i++) {
                 if(vm.items.inRoom[i].barcode == barcode) {
                     vm.items.inRoom[i].scanned = true;
-                    itemInRoom = true;
+                    item = vm.items.inRoom[i];
                     break;
                 }
             }
-            $scope.$apply();
-            return itemInRoom;
+            return item;
         }
 
         function refreshItemsList(items, checkItem) {
@@ -288,19 +300,29 @@
                     }
                 );
             } else {
-                // Do something here
+                // Manually Enter Barcode
+                var barcode = vm.barcode;
+                vm.barcode = null;
+                saveScan(barcode);
             }
         }
 
         function saveScan(barcode) {
             // Check if the item scanned is already in the room or not
-            if(!checkItem(barcode)) {
+            var item = checkItem(barcode);
+            if(!item) {
                 // Check to see if the item has already been created or not
                 getItemBarcodeApi(barcode)
                     .then(function success(item) {
                         // Item has already been created but is currently in the wrong room or creating new item
                         if(item) {
-                            vm.items.inWrongRoom.push(item);
+                            // Go directly to edit item for single item scans
+                            if(vm.scanSettings.scanType == 'Single Item') {
+                                vm.editItem(item);
+                            } else {
+                                vm.items.inWrongRoom.push(item);
+                            }
+                            
                         } else {
                             item = {
                                 barcode: barcode,
@@ -310,8 +332,13 @@
                             // Create basic item with new barcode
                             createItemApi(item)
                                 .then(function success(item) {
-                                    item.scanned = true;
-                                    vm.items.newItems.push(item);
+                                    // Go directly to edit item for single item scans
+                                    if(vm.scanSettings.scanType == 'Single Item') {
+                                        vm.editItem(item);
+                                    } else {
+                                        item.scanned = true;
+                                        vm.items.newItems.push(item);
+                                    }
                                 }).catch(function error() {
                                     // error handling
                                 });
@@ -319,7 +346,26 @@
                     }).catch(function error() {
                         // error handling
                     });
+            } else {
+                if($window.cordova){
+                    $scope.$apply();
+                }
+                // Go directly to edit item for single item scans
+                if(vm.scanSettings.scanType == 'Single Item') {
+                    vm.editItem(item);
+                }
             }
+        }
+
+        function resetScanSettings() {
+            vm.title = 'Set Scan Settings';
+            vm.scanSettings.room = null;
+            vm.scanSettings.set = false;
+            vm.items = {
+                inRoom: [],
+                inWrongRoom: [],
+                newItems: []
+            };
         }
     }
 })();

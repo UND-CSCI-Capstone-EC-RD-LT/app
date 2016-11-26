@@ -1,4 +1,5 @@
-<ion-view view-title="{{vm.viewTitle}}" class="Scan-Items">
+<ion-view class="Scan-Items">
+    <ion-nav-title>{{vm.title}}</ion-nav-title>
 	<ion-nav-buttons side="right">
 		<span ng-if="!vm.scanSettings.set">
 			<a ng-if="!vm.scanSettings.set" class="button button-icon icon ion-checkmark" ng-click="vm.confirmScanSettings()" ng-disabled="vm.scanSettingsForm.$invalid"></a>
@@ -8,7 +9,7 @@
     	</span>
     </ion-nav-buttons>
   	<ion-content ng-show="vm.render">
-        <!-- <input ng-if="vm.manualScan" type="text" name="barcode" placeholder="Enter Barcode" ng-model="vm.barcode" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"> -->
+        <input ng-if="vm.manualScan && vm.scanSettings.set" type="text" name="barcode" placeholder="Enter Barcode" ng-model="vm.barcode" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         <!-- Room Item List -->
   		<div ng-if="vm.scanSettings.set">
     		<ion-list class="modal-item">
@@ -79,7 +80,7 @@
 	        </form>
 	    </div>
   	</ion-content>
-  	<ion-footer-bar ng-if="vm.scanSettings.set && vm.scanSettings.scanType == 'Batch'">
+  	<ion-footer-bar ng-if="vm.scanSettings.set">
   		<button class="button button-full button-positive scan-btn" ng-click="vm.startScan()">Scan</button>
 	</ion-footer-bar>
 </ion-view>
