@@ -28,6 +28,7 @@
             vm.departments = [];
             vm.buildings = [];
             vm.rooms = [];
+            vm.types = [];
 
             getData(isRefresh);
         }

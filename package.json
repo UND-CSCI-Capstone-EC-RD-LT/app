@@ -21,6 +21,7 @@
     "phonegap-plugin-barcodescanner"
   ],
   "cordovaPlatforms": [
+    "android",
     "ios"
   ]
 }

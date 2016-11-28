@@ -8,10 +8,10 @@
     function Items($rootScope, $http, $q, API) {
 
         function getItem(itemId) {
-            return $http.get(API.sailsUrl + '/items/getItem/' + itemId)
+            return $http.get(API.sailsUrl + '/items/' + itemId)
                 .then(function success(res) {
                     if(res.data) {
-                        return res.data.data;
+                        return res.data.data[0];
                     } else {
                         return $q.reject(res.data);
                     }
@@ -45,7 +45,8 @@
                 headers: { 'Content-Type': 'application/form-data; charset=UTF-8' },
                 data: {
                     barcode: item.barcode,
-                    room: item.roomId,
+                    room: item.room,
+                    type: item.type,
                     creator: item.creator
                 },
                 url: (API.sailsUrl + '/items')

@@ -12,8 +12,10 @@
 
         // The edit user modal
         var scanSettingsModal = null;
-        // The items modal
-        var itemsModal = null;
+        // The new item modal
+        var newItemModal = null;
+
+        var newItem = {};
 
         // Returning to scan state from edit state and refreshing item list for changes
         $rootScope.$on('$stateChangeSuccess', function (ev, toState, toParams, fromState, fromParams) {
@@ -42,12 +44,11 @@
         //// INITIALIZATION FUNCTIONS ////
 
         function onEnter(isRefresh) {
-            console.log('ScanItemsController');
             vm.render = false;
 
             vm.title = 'Set Scan Settings';
 
-            vm.barcode = null;
+            newItem = {};
 
             vm.scanSettings = {
                 department: null,
@@ -66,9 +67,11 @@
             vm.departments = [];
             vm.buildings = [];
             vm.rooms = [];
+            vm.types = [];
 
             vm.manualScan = false;
             if(!$window.cordova) {
+                vm.barcode = null;
                 vm.manualScan = true;
             }
 
@@ -79,9 +82,30 @@
         // Retrieves the data from the db
         function getData(isRefresh) {
 
+            var d1 = $q.defer();
+            var d2 = $q.defer();
+
             getDepartmentsApi()
                 .then(function success(departments) {
                     vm.departments = departments;
+                    d1.resolve();
+                }).catch(function error() {
+                    // error handling
+                    d1.reject();
+                });
+
+            getItemTypesApi()
+                .then(function success(types) {
+                    vm.types = types;
+                    d2.resolve();
+                }).catch(function error() {
+                    // error handling
+                    d2.reject();
+                });
+
+             $q.all([d1.promise, d2.promise])
+                .then(function success() {
+
                 }).catch(function error() {
                     // error handling
                 });
@@ -126,6 +150,16 @@
             return Rooms.getItems(roomId)
                 .then(function success(items) {
                     return items;
+                }).catch(function error(reason) {
+                    //error handling
+                    return $q.reject();
+                });
+        }
+
+        function getItemTypesApi() {
+            return Items.getItemTypes()
+                .then(function success(types) {
+                    return types;
                 }).catch(function error(reason) {
                     //error handling
                     return $q.reject();
@@ -200,11 +234,30 @@
             hideScanSettingsModal();
         };
 
+        vm.hideNewItemModal = function() {
+            hideNewItemModal();
+        };
+
+        vm.confirmNewItem = function(){
+            // Create basic item with new barcode
+            newItem.type = vm.itemType.id
+            createItemApi(newItem)
+                .then(function success(item) {
+                    item.scanned = true;
+                    vm.items.inRoom.push(item);
+                    hideNewItemModal();
+                    newItem = {};
+                }).catch(function error() {
+                    // error handling
+                });
+        }
+
         vm.newScan = function() {
             hideScanSettingsModal();
             resetScanSettings();
         };
 
+        //TODO sort into dropdown by item type
         vm.confirmScanSettings = function() {
             getRoomItemsApi(vm.scanSettings.room.id)
                 .then(function success(items) {
@@ -231,16 +284,33 @@
 
         //// MODAL FUNCTIONS ////
 
-        // Hides the edit user modal
+        // Hides the scan settings modal
         function hideScanSettingsModal() {
             if(scanSettingsModal){
                 scanSettingsModal.hide();
             }
         }
 
-        // Hides the edit user modal
-        function hideItemsModal() {
-            itemsModal.hide();
+        function showNewItemModal() {
+            if(!newItemModal) {
+                $ionicModal.fromTemplateUrl('templates/modals/new-item.html', {
+                    scope: $scope,
+                    animation: 'slide-in-up' // maybe use slide-in-down if it works on mobile
+                }).then(function success(modal) {
+                    newItemModal = modal;
+                    newItemModal.show();
+                });
+            } else {
+                newItemModal.show();
+            }
+        }
+
+        // Hides the new item modal
+        function hideNewItemModal() {
+            if(newItemModal){
+                newItem = {};
+                newItemModal.hide();
+            }
         }
 
         //// END MODAL FUNCTIONS ////
@@ -266,7 +336,6 @@
                         vm.items.inWrongRoom.splice(index,1);
                         items[i].scanned = true;
                         vm.items.inRoom.push(items[i]);
-                        break;
                     }
                     break;
                 }
@@ -287,7 +356,7 @@
                 cordova.plugins.barcodeScanner.scan(
                     function (result) {
                         if(!result.cancelled){
-                            saveScan(result.text);
+                            saveItem(result.text);
                         }
                     },
                     function (error) {
@@ -303,11 +372,11 @@
                 // Manually Enter Barcode
                 var barcode = vm.barcode;
                 vm.barcode = null;
-                saveScan(barcode);
+                saveItem(barcode);
             }
         }
 
-        function saveScan(barcode) {
+        function saveItem(barcode) {
             // Check if the item scanned is already in the room or not
             var item = checkItem(barcode);
             if(!item) {
@@ -324,24 +393,13 @@
                             }
                             
                         } else {
-                            item = {
+                            newItem = {
                                 barcode: barcode,
-                                roomId: vm.scanSettings.room.id,
+                                room: vm.scanSettings.room.id,
+                                type: null,
                                 creator: $rootScope.user.id
                             };
-                            // Create basic item with new barcode
-                            createItemApi(item)
-                                .then(function success(item) {
-                                    // Go directly to edit item for single item scans
-                                    if(vm.scanSettings.scanType == 'Single Item') {
-                                        vm.editItem(item);
-                                    } else {
-                                        item.scanned = true;
-                                        vm.items.newItems.push(item);
-                                    }
-                                }).catch(function error() {
-                                    // error handling
-                                });
+                            showNewItemModal();
                         }
                     }).catch(function error() {
                         // error handling
