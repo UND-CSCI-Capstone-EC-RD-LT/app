@@ -7,12 +7,12 @@
 
     function API($rootScope, $http, $q, $window, $cookies) {
 
-        var sailsUrl = 'http://localhost:3000/v1';
+        var sailsUrl = 'http://54.174.7.166/v1';
 
         var errorTypes = {};
 
         // Creates a new session on the server, returning the session ID
-        function login(email, password) {  
+        function login(email, password) {
             return $http({
                 method: 'POST',
                 headers: { 'Content-Type': 'application/form-data; charset=UTF-8' },

@@ -2,10 +2,10 @@
     <ion-nav-title>{{vm.title}}</ion-nav-title>
 	<ion-nav-buttons side="right">
 		<span ng-if="!vm.scanSettings.set">
-			<a ng-if="!vm.scanSettings.set" class="button button-icon icon ion-checkmark" ng-click="vm.confirmScanSettings()" ng-disabled="vm.scanSettingsForm.$invalid"></a>
+			<a class="button button-icon icon ion-checkmark" on-touch="vm.confirmScanSettings()" ng-disabled="vm.scanSettingsForm.$invalid"></a>
 		</span>
         <span ng-if="vm.scanSettings.set">
-        	<a class="button button-icon icon ion-gear-a" ng-click="vm.showScanSettings()"></a>
+        	<a class="button button-icon icon ion-gear-a" on-touch="vm.showScanSettings()"></a>
     	</span>
     </ion-nav-buttons>
   	<ion-content ng-show="vm.render">

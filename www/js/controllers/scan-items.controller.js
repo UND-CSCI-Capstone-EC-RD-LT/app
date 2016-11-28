@@ -15,6 +15,7 @@
         // The new item modal
         var newItemModal = null;
 
+        // Holds new item data
         var newItem = {};
 
         // Returning to scan state from edit state and refreshing item list for changes
@@ -29,9 +30,8 @@
                             refreshItemsList(items, itemId);
                         }).catch(function error() {
                             // error handling
-                        });  
+                        });
                 }
-                
             }
         });
 
@@ -242,7 +242,6 @@
 
         vm.confirmNewItem = function(){
             // Create basic item with new barcode
-            newItem.type = vm.itemType.id
             createItemApi(newItem)
                 .then(function success(item) {
                     item.scanned = true;
@@ -252,7 +251,6 @@
                 }).catch(function error() {
                     // error handling
                 });
-        }
 
         vm.newScan = function() {
             hideScanSettingsModal();
@@ -287,12 +285,6 @@
         //// MODAL FUNCTIONS ////
 
         // Hides the scan settings modal
-        function hideScanSettingsModal() {
-            if(scanSettingsModal){
-                scanSettingsModal.hide();
-            }
-        }
-
         function showNewItemModal() {
             if(!newItemModal) {
                 $ionicModal.fromTemplateUrl('templates/modals/new-item.html', {
@@ -315,18 +307,7 @@
             }
         }
 
-        //// END MODAL FUNCTIONS ////
-
-        function checkItem(barcode) {
-            var item = null;
-            for(var i = 0; i < vm.items.inRoom.length; i++) {
-                if(vm.items.inRoom[i].barcode == barcode) {
-                    vm.items.inRoom[i].scanned = true;
-                    item = vm.items.inRoom[i];
-                    break;
-                }
             }
-            return item;
         }
 
         function refreshItemsList(items, checkItem) {
@@ -393,7 +374,6 @@
                             } else {
                                 vm.items.inWrongRoom.push(item);
                             }
-                            
                         } else {
                             newItem = {
                                 barcode: barcode,
