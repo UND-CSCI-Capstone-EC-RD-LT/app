@@ -242,6 +242,7 @@
 
         vm.confirmNewItem = function(){
             // Create basic item with new barcode
+            newItem.type = vm.itemType.id;
             createItemApi(newItem)
                 .then(function success(item) {
                     item.scanned = true;
@@ -251,6 +252,7 @@
                 }).catch(function error() {
                     // error handling
                 });
+        };
 
         vm.newScan = function() {
             hideScanSettingsModal();
@@ -307,8 +309,13 @@
             }
         }
 
+        function hideScanSettingsModal() {
+            if(scanSettingsModal){
+                scanSettingsModal.hide();
             }
         }
+
+        //// END MODAL FUNCTIONS ////
 
         function refreshItemsList(items, checkItem) {
             var index = -1;
@@ -332,6 +339,18 @@
                 }
             }
             return -1;
+        }
+
+        function checkItem(barcode) {
+            var item = null;
+            for(var i = 0; i < vm.items.inRoom.length; i++) {
+                if(vm.items.inRoom[i].barcode == barcode) {
+                    vm.items.inRoom[i].scanned = true;
+                    item = vm.items.inRoom[i];
+                    break;
+                }
+            }
+            return item;
         }
 
         function startScan() {
