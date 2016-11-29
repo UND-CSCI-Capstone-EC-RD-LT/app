@@ -64,6 +64,8 @@
                 newItems: []
             };
 
+            vm.itemType = null;
+
             vm.departments = [];
             vm.buildings = [];
             vm.rooms = [];
@@ -315,7 +317,7 @@
 
         //// END MODAL FUNCTIONS ////
 
-        function checkItem(barcode){
+        function checkItem(barcode) {
             var item = null;
             for(var i = 0; i < vm.items.inRoom.length; i++) {
                 if(vm.items.inRoom[i].barcode == barcode) {
@@ -424,6 +426,7 @@
                 inWrongRoom: [],
                 newItems: []
             };
+            vm.itemType = null;
         }
     }
 })();
