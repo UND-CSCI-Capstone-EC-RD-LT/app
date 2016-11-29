@@ -7,7 +7,7 @@
 
     function API($rootScope, $http, $q, $window, $cookies) {
 
-        var sailsUrl = 'http://localhost:3000/v1';
+        var sailsUrl = 'http://54.243.4.179/v1';
 
         var errorTypes = {};
 

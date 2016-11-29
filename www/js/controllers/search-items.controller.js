@@ -19,10 +19,6 @@
         function onEnter(isRefresh) {
             vm.render = false;
 
-            vm.accordion = {
-                isOpen: false
-            };
-
             vm.departments = null;
             vm.buildings = null;
             vm.rooms = null;
@@ -52,11 +48,6 @@
         }
 
         //// END INITIALIZATION FUNCTIONS ////
-
-        // Opens an organization accordion
-        vm.toggleItemTypeOpen = function() {
-            vm.accordion.isOpen = !vm.accordion.isOpen;
-        };
 
         //// API FUNCTIONS ////
 
@@ -103,7 +94,7 @@
                 }).catch(function error() {
                     // error handling
                 });
-        }
+        };
 
         vm.setBuilding = function() {
             vm.search.room = null;
@@ -113,7 +104,11 @@
                 }).catch(function error() {
                     // error handling
                 });
-        }
+        };
+
+        vm.clearSearch = function() {
+            onEnter();
+        };
 
         vm.searchItems = function() {
             $state.go('.view-items', {
@@ -121,7 +116,7 @@
                 buildingId: vm.search.building ? vm.search.building.id : 0,
                 roomId: vm.search.room ? vm.search.room.id : 0
             });
-        }
+        };
 
         //// END VIEW MODEL FUNCTIONS ////
     }
