@@ -1,5 +1,20 @@
 <ion-view view-title="View Items" class="View-Items">
   <ion-content ng-show="vm.render">
-    <h1>View Items</h1>
+  	<ion-list class="results">
+  		<!-- Types -->
+  		<div ng-repeat="type in vm.itemTypes">
+  			<!-- Type -->
+	  		<a class="item item-icon-left item-icon-right" ng-click="vm.toggleItemTypeOpen(type)">
+			    <i class="icon" ng-class="{'ion-monitor': type.name=='Computers', 'ion-ios-pricetag-outline': type.name=='Desks', 'ion-compose': type.name=='White Boards'}"></i>
+			    <h2>{{type.name}}</h2>
+			    <p>Count: {{type.items.length}}</p>
+			    <i class="icon" ng-class="type.isOpen ? 'ion-ios-arrow-up' : 'ion-ios-arrow-down'"></i>
+			</a>
+			<!-- Item -->
+			<ion-item ng-repeat="item in type.items" class="accordion" ng-class="{ 'hidden': !type.isOpen, 'no-animate': (type.items.length > 50) }">
+	            <p>{{item}}</p>
+	        </ion-item>
+	    </div>
+	</ion-list>
   </ion-content>
 </ion-view>

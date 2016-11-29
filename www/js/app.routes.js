@@ -38,11 +38,20 @@
                   }
                 }
             })
-
-            .state('app.view-items', {
-                url: '/view-items',
+            .state('app.search-items', {
+                url: '/search-items',
                 views: {
                     'menuContent': {
+                        templateUrl: 'templates/search-items.html',
+                        controller: 'SearchItemsController',
+                        controllerAs: 'vm'
+                    }
+                }
+            })
+            .state('app.search-items.view-items', {
+                url: '/view-items/:departmentId/:buildingId/:roomId',
+                views: {
+                    'menuContent@app': {
                         templateUrl: 'templates/view-items.html',
                         controller: 'ViewItemsController',
                         controllerAs: 'vm'

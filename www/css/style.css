@@ -33,7 +33,7 @@
     color: #444444;
 }
 
-.Scan-Items select, .Edit-Item select, .New-Item select {
+.Scan-Items select, .Search-Items select, .Edit-Item select, .New-Item select {
     font-size: 16px;
     color: #444444;
 }
@@ -78,3 +78,31 @@
 .Edit-Item .non-editable-field span, .Edit-Item .non-editable-field h2 {
 	color: #6d6d6d;
 }
+
+/* Animate the inner content when the content is clicked */
+.View-Items .accordion {
+    transition: all 0.09s linear;
+} .View-Items .accordion.no-animate {
+    transition: none;
+}
+
+/* The properties to animate for the inner content (see above) */
+.View-Items .hidden {
+    height: 0;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border: 0;
+}
+
+/* Place the content at the bottom of its parent content */
+.Search-Items .scroll {
+    height: 100%;
+} .Search-Items .search {
+    position: absolute;
+    bottom: 0;
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 0;
+}
+
