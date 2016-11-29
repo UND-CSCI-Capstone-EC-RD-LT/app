@@ -59,17 +59,18 @@
             };
 
             vm.items = {
-                inRoom: [],
-                inWrongRoom: [],
-                newItems: []
+                inRoom: {},
+                inWrongRoom: []
             };
+
+            vm.hasItemsInRoom = true;
 
             vm.itemType = null;
 
             vm.departments = [];
             vm.buildings = [];
             vm.rooms = [];
-            vm.types = [];
+            vm.types = {};
 
             vm.manualScan = false;
             if(!$window.cordova) {
@@ -98,7 +99,17 @@
 
             getItemTypesApi()
                 .then(function success(types) {
-                    vm.types = types;
+                    for (var i = 0; i < types.length; i++) {
+                        vm.types[types[i].id] = types[i];
+                        vm.items.inRoom[types[i].id] = {
+                            name: types[i].name,
+                            id: types[i].id,
+                            scanned: 0,
+                            items: []
+                        }
+
+                    }
+
                     d2.resolve();
                 }).catch(function error() {
                     // error handling
@@ -246,7 +257,8 @@
             createItemApi(newItem)
                 .then(function success(item) {
                     item.scanned = true;
-                    vm.items.inRoom.push(item);
+                    vm.items.inRoom[newItem.type].scanned++;
+                    vm.items.inRoom[newItem.type].items.push(item);
                     hideNewItemModal();
                     newItem = {};
                 }).catch(function error() {
@@ -262,7 +274,7 @@
         vm.confirmScanSettings = function() {
             getRoomItemsApi(vm.scanSettings.room.id)
                 .then(function success(items) {
-                    vm.items.inRoom = sortItemsByType(items);
+                    sortItemsByType(items);
                     vm.scanSettings.set = true;
                     vm.title = 'Scan Items';
                     if(vm.scanSettings.scanType == 'Single Item' && $window.cordova) {
@@ -336,23 +348,21 @@
             }
         }
 
-        function indexOfItem(array, item) {
-            for (var i = 0; i < array.length; i++) {
-                if(array[i].id === item.id) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
         // TODO update checkItem function to work with new sorted item list by item type
         function checkItem(barcode) {
             var item = null;
-            for(var i = 0; i < vm.items.inRoom.length; i++) {
-                if(vm.items.inRoom[i].barcode == barcode) {
-                    vm.items.inRoom[i].scanned = true;
-                    item = vm.items.inRoom[i];
-                    break;
+            var type = null;
+            for(var key in vm.items.inRoom) {
+                type = vm.items.inRoom[key];
+                for (var y = 0; y < type.items.length; y++) {
+                    if(type.items[y].barcode == barcode) {
+                        item = type.items[y];
+                        if(!type.items[y].scanned){
+                            type.scanned++;
+                            type.items[y].scanned = true;
+                        }
+                        break;
+                    }
                 }
             }
             return item;
@@ -426,46 +436,29 @@
             vm.scanSettings.room = null;
             vm.scanSettings.set = false;
             vm.items = {
-                inRoom: [],
-                inWrongRoom: [],
-                newItems: []
+                inRoom: {},
+                inWrongRoom: []
             };
             vm.itemType = null;
         }
 
-        function sortItemsByType(items) {
-            var inRoom = [];
-            if(items.length > 0) {
-
-                var typeCount = 0;
-                var currentItemType = vm.types[items[0].type-1];
-
-                inRoom.push({
-                    name: currentItemType.name,
-                    id: currentItemType.id,
-                    items: []
-                });
-
-                for (var i = 0; i < items.length; i++) {
-                    if(items[i].type === currentItemType.id) {
-
-                        inRoom[typeCount].items.push(items[i]);
-
-                    } else {
-
-                        currentItemType = vm.types[items[i].type-1];
-
-                        inRoom.push({
-                            name: currentItemType.name,
-                            id: currentItemType.id,
-                            items: [items[i]]
-                        });
-
-                        typeCount++;
-                    }
+        function indexOfItem(array, item) {
+            for (var i = 0; i < array.length; i++) {
+                if(array[i].id === item.id) {
+                    return i;
                 }
             }
-            return inRoom;
+            return -1;
+        }
+
+        function sortItemsByType(items) {
+            if(items.length > 0) {
+                for (var i = 0; i < items.length; i++) {
+                    vm.items.inRoom[items[i].type].items.push(items[i]);
+                }
+            } else {
+                vm.hasItemsInRoom = false;
+            }
         }
     }
 })();
