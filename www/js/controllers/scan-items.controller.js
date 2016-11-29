@@ -259,11 +259,10 @@
             resetScanSettings();
         };
 
-        //TODO sort into dropdown by item type
         vm.confirmScanSettings = function() {
             getRoomItemsApi(vm.scanSettings.room.id)
                 .then(function success(items) {
-                    vm.items.inRoom = items;
+                    vm.items.inRoom = sortItemsByType(items);
                     vm.scanSettings.set = true;
                     vm.title = 'Scan Items';
                     if(vm.scanSettings.scanType == 'Single Item' && $window.cordova) {
@@ -280,6 +279,11 @@
 
         vm.editItem = function(item) {
             $state.go('^.edit-item', {itemId: item.id});
+        };
+
+        // Opens a type accordion
+        vm.toggleItemTypeOpen = function(type) {
+           type.isOpen = !type.isOpen;
         };
 
         //// END VIEW MODEL FUNCTIONS ////
@@ -341,6 +345,7 @@
             return -1;
         }
 
+        // TODO update checkItem function to work with new sorted item list by item type
         function checkItem(barcode) {
             var item = null;
             for(var i = 0; i < vm.items.inRoom.length; i++) {
@@ -426,6 +431,41 @@
                 newItems: []
             };
             vm.itemType = null;
+        }
+
+        function sortItemsByType(items) {
+            var inRoom = [];
+            if(items.length > 0) {
+
+                var typeCount = 0;
+                var currentItemType = vm.types[items[0].type-1];
+
+                inRoom.push({
+                    name: currentItemType.name,
+                    id: currentItemType.id,
+                    items: []
+                });
+
+                for (var i = 0; i < items.length; i++) {
+                    if(items[i].type === currentItemType.id) {
+
+                        inRoom[typeCount].items.push(items[i]);
+
+                    } else {
+
+                        currentItemType = vm.types[items[i].type-1];
+
+                        inRoom.push({
+                            name: currentItemType.name,
+                            id: currentItemType.id,
+                            items: [items[i]]
+                        });
+
+                        typeCount++;
+                    }
+                }
+            }
+            return inRoom;
         }
     }
 })();

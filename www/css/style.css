@@ -80,14 +80,14 @@
 }
 
 /* Animate the inner content when the content is clicked */
-.View-Items .accordion {
+.Scan-Items .accordion, .View-Items .accordion {
     transition: all 0.09s linear;
-} .View-Items .accordion.no-animate {
+} .Scan-Items .accordion.no-animate, .View-Items .accordion.no-animate {
     transition: none;
 }
 
 /* The properties to animate for the inner content (see above) */
-.View-Items .hidden {
+.Scan-Items .hidden, .View-Items .hidden {
     height: 0;
     margin: 0;
     padding-top: 0;
