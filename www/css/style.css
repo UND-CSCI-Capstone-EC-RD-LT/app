@@ -2,40 +2,79 @@
 	cursor: pointer;
 }
 
-.Scan-Items ion-footer-bar:hover {
-	cursor: pointer;
+.Scan-Items ion-footer-bar {
+	padding: 0;
 }
 
-.Scan-Items .items {
-	width: 100%;
-	bottom: 10px;
-	line-height: 32px;
-	position: relative;
-	font-size: 17px;
-	text-align: center;
+.Scan-Items .scan-btn {
+	margin: 0;
+	font-size: 18px;
+	font-weight: 600;
 }
 
-.Scan-Items .items .ion-ios-arrow-up {
-	display: block;
-	height: 17px;
-	font-size: 32px;
+.Scan-Items .ion-checkmark-circled {
+	color: #009A44;
 }
 
-.Items-Modal ion-header-bar:hover {
-	cursor: pointer;
+/* Place the content at the bottom of its parent content */
+.Scan-Settings .scroll {
+    height: 100%;
+} .Scan-Settings .button-bottom {
+    position: absolute;
+    bottom: 0;
+    font-weight: 600;
 }
 
-.Items-Modal .items {
-	width: 100%;
-	bottom: 10px;
-	line-height: 27px;
-	position: relative;
-	font-size: 17px;
-	text-align: center;
+.Scan-Settings .item-note, .Edit-Item .item-note {
+    max-width: 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 16px;
+    color: #444444;
 }
 
-.Items-Modal .items .ion-ios-arrow-down {
-	display: block;
-	height: 17px;
-	font-size: 32px;
+.Scan-Items select, .Edit-Item select, .New-Item select {
+    font-size: 16px;
+    color: #444444;
+}
+
+.Scan-Items select:disabled, .Edit-Item select:disabled {
+	pointer-events: none;
+}
+
+.Edit-Item select:disabled{
+    z-index: 1;
+    padding-right: 16px;
+}
+
+.Edit-Item .item .parent-not-set {
+    z-index: 0;
+}
+
+.Edit-Item .item-input input {
+    text-align: right;
+    font-size: 16px;
+    color: #444444;
+}
+
+.Edit-Item .item-input input:disabled {
+    background-color: transparent;
+}
+
+.Edit-Item .item-input textarea {
+    background-color: transparent;
+    font-size: 16px;
+    color: #444444;
+}
+
+.Edit-Item .item-input textarea:disabled {
+    background-color: transparent;
+}
+
+.Edit-Item .non-editable-field {
+	background-color: #f5f5f5;
+}
+
+.Edit-Item .non-editable-field span, .Edit-Item .non-editable-field h2 {
+	color: #6d6d6d;
 }
