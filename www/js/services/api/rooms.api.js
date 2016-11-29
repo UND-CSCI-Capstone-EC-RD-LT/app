@@ -8,10 +8,26 @@
     function Rooms($rootScope, $http, $q, API) {
 
         function getBuildingRooms(buildingId) {
-            return $http.get(API.sailsUrl + '/buildings/' + buildingId + '/room')
+            return $http.get(API.sailsUrl + '/rooms/building/'+buildingId)
                 .then(function success(res) {
                     if(res.data) {
                         return res.data.data.rooms;
+                    } else {
+                        return $q.reject(res.data);
+                    }
+                }).catch(function error(reason) {
+                    return $q.reject({
+                        error: 'Error with API request.',
+                        origErr: reason
+                    });
+                });
+        }
+
+        function getItems(roomId) {
+            return $http.get(API.sailsUrl + '/rooms/' + roomId + '/item')
+                .then(function success(res) {
+                    if(res.data) {
+                        return res.data.data.items;
                     } else {
                         return $q.reject(res.data);
                     }
@@ -66,6 +82,7 @@
 
         return {
             getBuildingRooms : getBuildingRooms,
+            getItems         : getItems,
             updateExample    : updateExample,
             insertExample    : insertExample
         };
