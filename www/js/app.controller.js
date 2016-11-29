@@ -3,15 +3,19 @@
 
     angular
         .module('app.controllers')
-        .controller('AppController', ['API', AppController]);
+        .controller('AppController', ['$rootScope', 'API', AppController]);
 
-    function AppController(API) {
+    function AppController($rootScope, API) {
         var vm = this;
 
-        var email = 'test@test.com';
         var password = 'test';
 
-        API.login(email, password).then(function(res) {
+        $rootScope.user = {
+            email: 'test@test.com',
+            id: 1
+        }
+
+        API.login($rootScope.user.email, password).then(function(res) {
             console.log('logged in');
         });
         // With the new view caching in Ionic, Controllers are only called
