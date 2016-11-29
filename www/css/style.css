@@ -33,7 +33,7 @@
     color: #444444;
 }
 
-.Scan-Items select, .Edit-Item select, .New-Item select {
+.Scan-Items select, .Search-Items select, .Edit-Item select, .New-Item select {
     font-size: 16px;
     color: #444444;
 }
