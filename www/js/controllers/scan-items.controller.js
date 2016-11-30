@@ -18,22 +18,7 @@
         // Holds new item data
         var newItem = {};
 
-        // Returning to scan state from edit state and refreshing item list for changes
-        $rootScope.$on('$stateChangeSuccess', function (ev, toState, toParams, fromState, fromParams) {
-            if(fromState.name == 'app.edit-item') {
-                if(vm.scanSettings.scanType == 'Single Item') {
-                    resetScanSettings();
-                } else {
-                    getRoomItemsApi(vm.scanSettings.room.id)
-                        .then(function success(items) {
-                            var itemId = fromParams.itemId;
-                            refreshItemsList(items, itemId);
-                        }).catch(function error() {
-                            // error handling
-                        });
-                }
-            }
-        });
+        var editedItem = {};
 
         // DEVELOPMENT ONLY
         // WAITING SO THE JWT TOKEN IS SET BEFORE CALLING
@@ -58,18 +43,19 @@
                 set: false
             };
 
-            vm.items = {
-                inRoom: [],
-                inWrongRoom: [],
-                newItems: []
+            vm.room = {
+                inRoom: {},
+                inWrongRoom: []
             };
+
+            vm.hasItemsInRoom = true;
 
             vm.itemType = null;
 
             vm.departments = [];
             vm.buildings = [];
             vm.rooms = [];
-            vm.types = [];
+            vm.types = {};
 
             vm.manualScan = false;
             if(!$window.cordova) {
@@ -98,7 +84,16 @@
 
             getItemTypesApi()
                 .then(function success(types) {
-                    vm.types = types;
+                    for (var i = 0; i < types.length; i++) {
+                        vm.types[types[i].id] = types[i];
+                        vm.room.inRoom[types[i].id] = {
+                            name: types[i].name,
+                            id: types[i].id,
+                            scanned: 0,
+                            items: []
+                        }
+                    }
+
                     d2.resolve();
                 }).catch(function error() {
                     // error handling
@@ -178,6 +173,16 @@
                 });
         }
 
+        function getItemApi(itemId) {
+            return Items.getItem(itemId)
+                .then(function success(item) {
+                    return item;
+                }).catch(function error(reason) {
+                    //error handling
+                    return $q.reject();
+                });
+        }
+
         function createItemApi(item) {
             return Items.createItem(item)
                 .then(function success(item) {
@@ -219,17 +224,7 @@
         };
 
         vm.showScanSettings = function() {
-            if(!scanSettingsModal) {
-                $ionicModal.fromTemplateUrl('templates/modals/scan-settings.html', {
-                    scope: $scope,
-                    animation: 'slide-in-up' // maybe use slide-in-down if it works on mobile
-                }).then(function success(modal) {
-                    scanSettingsModal = modal;
-                    scanSettingsModal.show();
-                });
-            } else {
-                scanSettingsModal.show();
-            }
+            showScanSettingsModal();
         };
 
         vm.hideScanSettings = function() {
@@ -245,8 +240,13 @@
             newItem.type = vm.itemType.id;
             createItemApi(newItem)
                 .then(function success(item) {
-                    item.scanned = true;
-                    vm.items.inRoom.push(item);
+                    if(vm.scanSettings.scanType == 'Single Item') {
+                        vm.editItem(item);
+                    } else {
+                        item.scanned = true;
+                        vm.room.inRoom[newItem.type].scanned++;
+                        vm.room.inRoom[newItem.type].items.push(item);
+                    }
                     hideNewItemModal();
                     newItem = {};
                 }).catch(function error() {
@@ -254,16 +254,14 @@
                 });
         };
 
-        vm.newScan = function() {
-            hideScanSettingsModal();
-            resetScanSettings();
-        };
-
-        //TODO sort into dropdown by item type
         vm.confirmScanSettings = function() {
             getRoomItemsApi(vm.scanSettings.room.id)
                 .then(function success(items) {
-                    vm.items.inRoom = items;
+                    if(items.length > 0) {
+                        sortItemsByType(items);
+                    } else {
+                        vm.hasItemsInRoom = false;
+                    }
                     vm.scanSettings.set = true;
                     vm.title = 'Scan Items';
                     if(vm.scanSettings.scanType == 'Single Item' && $window.cordova) {
@@ -274,12 +272,23 @@
                 });
         };
 
+        vm.newScan = function() {
+            hideScanSettingsModal();
+            resetScanSettings();
+        };
+
         vm.startScan = function(){
             startScan();
         };
 
         vm.editItem = function(item) {
+            editedItem = item;
             $state.go('^.edit-item', {itemId: item.id});
+        };
+
+        // Opens a type accordion
+        vm.toggleItemTypeOpen = function(type) {
+           type.isOpen = !type.isOpen;
         };
 
         //// END VIEW MODEL FUNCTIONS ////
@@ -287,6 +296,20 @@
         //// MODAL FUNCTIONS ////
 
         // Hides the scan settings modal
+        function showScanSettingsModal() {
+            if(!scanSettingsModal) {
+                $ionicModal.fromTemplateUrl('templates/modals/scan-settings.html', {
+                    scope: $scope,
+                    animation: 'slide-in-up' // maybe use slide-in-down if it works on mobile
+                }).then(function success(modal) {
+                    scanSettingsModal = modal;
+                    scanSettingsModal.show();
+                });
+            } else {
+                scanSettingsModal.show();
+            }
+        }
+
         function showNewItemModal() {
             if(!newItemModal) {
                 $ionicModal.fromTemplateUrl('templates/modals/new-item.html', {
@@ -317,37 +340,21 @@
 
         //// END MODAL FUNCTIONS ////
 
-        function refreshItemsList(items, checkItem) {
-            var index = -1;
-            for(var i = 0; i < items.length; i++) {
-                if(items[i].id == checkItem) {
-                    index = indexOfItem(vm.items.inWrongRoom, items[i]);
-                    if(index > -1) {
-                        vm.items.inWrongRoom.splice(index,1);
-                        items[i].scanned = true;
-                        vm.items.inRoom.push(items[i]);
-                    }
-                    break;
-                }
-            }
-        }
-
-        function indexOfItem(array, item) {
-            for (var i = 0; i < array.length; i++) {
-                if(array[i].id === item.id) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
+        // TODO update checkItem function to work with new sorted item list by item type
         function checkItem(barcode) {
             var item = null;
-            for(var i = 0; i < vm.items.inRoom.length; i++) {
-                if(vm.items.inRoom[i].barcode == barcode) {
-                    vm.items.inRoom[i].scanned = true;
-                    item = vm.items.inRoom[i];
-                    break;
+            var type = null;
+            for(var key in vm.room.inRoom) {
+                type = vm.room.inRoom[key];
+                for (var y = 0; y < type.items.length; y++) {
+                    if(type.items[y].barcode == barcode) {
+                        item = type.items[y];
+                        if(!type.items[y].scanned){
+                            type.scanned++;
+                            type.items[y].scanned = true;
+                        }
+                        break;
+                    }
                 }
             }
             return item;
@@ -391,7 +398,12 @@
                             if(vm.scanSettings.scanType == 'Single Item') {
                                 vm.editItem(item);
                             } else {
-                                vm.items.inWrongRoom.push(item);
+                                vm.room.inWrongRoom.push({
+                                    id: item.id,
+                                    barcode: item.barcode,
+                                    room: item.roomId,
+                                    type: item.itemTypeId
+                                });
                             }
                         } else {
                             newItem = {
@@ -420,12 +432,94 @@
             vm.title = 'Set Scan Settings';
             vm.scanSettings.room = null;
             vm.scanSettings.set = false;
-            vm.items = {
-                inRoom: [],
-                inWrongRoom: [],
-                newItems: []
+            vm.room = {
+                inRoom: {},
+                inWrongRoom: []
             };
             vm.itemType = null;
+            getItemTypesApi()
+                .then(function success(types) {
+                    for (var i = 0; i < types.length; i++) {
+                        vm.types[types[i].id] = types[i];
+                        vm.room.inRoom[types[i].id] = {
+                            name: types[i].name,
+                            id: types[i].id,
+                            scanned: 0,
+                            items: []
+                        }
+                    }
+                });
         }
+
+        function sortItemsByType(items) {
+            for (var i = 0; i < items.length; i++) {
+                vm.room.inRoom[items[i].type].items.push(items[i]);
+            }
+        }
+
+        // Returning to scan state from edit state and refreshing item list for changes
+        $rootScope.$on('$stateChangeSuccess', function (ev, toState, toParams, fromState, fromParams) {
+            if(fromState.name == 'app.edit-item') {
+                if(vm.scanSettings.scanType == 'Single Item') {
+                    resetScanSettings();
+                } else {
+                    getItemApi(fromParams.itemId)
+                        .then(function success(item) {
+                            if(editedItem.room !== vm.scanSettings.room.id && item.roomId === vm.scanSettings.room.id) {// Wrong room to current room
+                                // Remove item from in wrong room list
+                                for (var i = 0; i < vm.room.inWrongRoom.length; i++) {
+                                    if(vm.room.inWrongRoom[i].id === editedItem.id) {
+                                        vm.room.inWrongRoom.splice(i, 1);
+                                        break;
+                                    }
+                                }
+                                // Increment type scanned count
+                                vm.room.inRoom[item.itemTypeId].scanned++;
+                                // Add item to new type list
+                                vm.room.inRoom[item.itemTypeId].items.push({
+                                    id: item.id,
+                                    barcode: item.barcode,
+                                    room: item.roomId,
+                                    type: item.itemTypeId,
+                                    scanned: true
+                                });
+                            } else if(editedItem.room === vm.scanSettings.room.id && item.roomId === vm.scanSettings.room.id) { // In correct room and changing item type
+                                if(editedItem.type !== item.itemTypeId){
+                                    // Remove item from old type list
+                                    for (var i = 0; i < vm.room.inRoom[editedItem.type].items.length; i++) {
+                                        if(vm.room.inRoom[editedItem.type].items[i].id === editedItem.id) {
+                                            vm.room.inRoom[editedItem.type].items.splice(i, 1);
+                                            break;
+                                        }
+                                    }
+                                    // Decrement scanned count for old type if it was scanned before
+                                    if(editedItem.scanned) {
+                                        vm.room.inRoom[editedItem.type].scanned--;
+                                    }
+                                    // Switch the item type to the new type
+                                    editedItem.type = item.itemTypeId
+                                    // Increment scanned count for new type if it was scanned before
+                                    if(editedItem.scanned) {
+                                        vm.room.inRoom[editedItem.type].scanned++;
+                                    }
+                                    // Add item to new type list
+                                    vm.room.inRoom[editedItem.type].items.push(editedItem);
+                                }
+                            } else if(editedItem.room === vm.scanSettings.room.id && item.roomId !== vm.scanSettings.room.id) { // In room to different room
+                                for (var i = 0; i < vm.room.inRoom[editedItem.type].items.length; i++) {
+                                    if(vm.room.inRoom[editedItem.type].items[i].id === editedItem.id) {
+                                        vm.room.inRoom[editedItem.type].items.splice(i, 1);
+                                        break;
+                                    }
+                                }
+                                if(editedItem.scanned) {
+                                    vm.room.inRoom[editedItem.type].scanned--;
+                                }
+                            }
+                            
+                        });
+                }
+            }
+        });
     }
 })();

@@ -1,4 +1,4 @@
-<ion-view class="Scan-Items">
+<ion-view class="Scan-Items" has-footer="true">
     <ion-nav-title>{{vm.title}}</ion-nav-title>
 	<ion-nav-buttons side="right">
 		<span ng-if="!vm.scanSettings.set">
@@ -18,29 +18,31 @@
                 <div class="item item-divider">
                     In Room
                 </div>
-                <ion-item ng-if="!vm.items.inRoom.length">
+                <ion-item ng-if="!vm.hasItemsInRoom">
                     <h2>No items in room</h2>
                 </ion-item>
-                <ion-item ng-repeat="item in vm.items.inRoom" class="item-icon-right" ng-click="vm.editItem(item)">
-                    <h2>{{ item.barcode }}</h2>
-                    <i ng-if="item.scanned" class="icon ion-checkmark-circled"></i>
-                </ion-item>
+                <!-- Types -->
+                <div ng-repeat="(key, type) in vm.room.inRoom">
+                    <!-- Type -->
+                    <a ng-if="type.items.length" class="item item-icon-left item-icon-right" ng-click="vm.toggleItemTypeOpen(type)">
+                        <i class="icon" ng-class="{'ion-monitor': type.name=='Computer', 'ion-ios-pricetag-outline': type.name=='Desk', 'ion-compose': type.name=='test'}"></i>
+                        <h2>{{type.name}}</h2>
+                        <p>Scanned: {{type.scanned}}/{{type.items.length}}</p>
+                        <i class="icon" ng-class="type.isOpen ? 'ion-ios-arrow-up' : 'ion-ios-arrow-down'"></i>
+                    </a>
+                    <!-- Item -->
+                    <ion-item ng-repeat="item in type.items" class="accordion item-icon-right" ng-click="vm.editItem(item)" ng-class="{ 'hidden': !type.isOpen, 'no-animate': (type.items.length > 50) }">
+                        <p>{{item.barcode}}</p>
+                        <i ng-if="item.scanned" class="icon ion-checkmark-circled"></i>
+                    </ion-item>
+                </div>
 
                 <!-- In Wrong Room -->
-                <div ng-if="vm.items.inWrongRoom.length" class="item item-divider">
+                <div ng-if="vm.room.inWrongRoom.length" class="item item-divider">
                     In Wrong Room
                 </div>
-                <ion-item ng-repeat="item in vm.items.inWrongRoom" ng-click="vm.editItem(item)">
-                    <h2>{{ item.barcode }}</h2>
-                </ion-item>
-
-                <!-- New Items -->
-                <div ng-if="vm.items.newItems.length" class="item item-divider">
-                    New Items
-                </div>
-                <ion-item ng-repeat="item in vm.items.newItems" class="item-icon-right" ng-click="vm.editItem(item)">
-                    <h2>{{ item.barcode }}</h2>
-                    <i ng-if="item.scanned" class="icon ion-checkmark-circled"></i>
+                <ion-item ng-repeat="item in vm.room.inWrongRoom" ng-click="vm.editItem(item)">
+                    <p>{{ item.barcode }}</p>
                 </ion-item>
             </ion-list>
     	</div>

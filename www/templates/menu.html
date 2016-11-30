@@ -28,12 +28,12 @@
                 <ion-item menu-close ui-sref=".user-information">
                     User Information
                 </ion-item>
-                <ion-item menu-close ui-sref=".admin-tools">
+                <ion-item menu-close ui-sref=".admin-tools" ng-if="false">
                     Admin Tools
                 </ion-item>
             </ion-list>
             <!-- Logout Button -->
-            <button class="button button-full button-outline button-assertive logout" ng-click="vm.logout()">Logout</button>
+            <button class="button button-full button-outline button-assertive button-bottom" ng-click="vm.logout()">Logout</button>
         </ion-content>
     </ion-side-menu>
 </ion-side-menus>
