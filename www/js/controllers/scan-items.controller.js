@@ -483,7 +483,7 @@
                                     type: item.itemTypeId,
                                     scanned: true
                                 });
-                            } else if(editedItem.room === vm.scanSettings.room.id && item.roomId === vm.scanSettings.room.id) { // In correct room and changing item type
+                            } else if(editedItem.room === vm.scanSettings.room.id && item.roomId === vm.scanSettings.room.id) { // In the correct room and changing item type
                                 if(editedItem.type !== item.itemTypeId){
                                     // Remove item from old type list
                                     for (var i = 0; i < vm.room.inRoom[editedItem.type].items.length; i++) {
