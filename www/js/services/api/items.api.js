@@ -39,6 +39,31 @@
                 });
         }
 
+        function searchItems(departmentId, buildingId, roomId) {
+            var route = API.sailsUrl + '/items/search/' + departmentId
+            
+            if(buildingId != 0) {
+                route += '/' + buildingId;
+                if(roomId != 0) {
+                    route += '/' + roomId;
+                }
+            }
+
+            return $http.get(route)
+                .then(function success(res) {
+                    if(res.data) {
+                        return res.data.data;
+                    } else {
+                        return $q.reject(res.data);
+                    }
+                }).catch(function error(reason) {
+                    return $q.reject({
+                        error: 'Error with API request.',
+                        origErr: reason
+                    });
+                });
+        }
+
         function createItem(item) {
             return $http({
                 method: 'POST',
@@ -111,6 +136,7 @@
             getItem        : getItem,
             getItemBarcode : getItemBarcode,
             getItemTypes   : getItemTypes,
+            searchItems    : searchItems,
             createItem     : createItem,
             updateItem     : updateItem
         };
