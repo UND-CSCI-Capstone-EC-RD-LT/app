@@ -8,7 +8,7 @@
         <div ng-repeat="(key, type) in vm.types">
             <!-- Type -->
             <a ng-if="type.items.length" class="item item-icon-left item-icon-right" ng-click="vm.toggleItemTypeOpen(type)">
-                <i class="icon" ng-class="{'ion-monitor': type.name=='Computer', 'ion-ios-pricetag-outline': type.name=='Desk', 'ion-compose': type.name=='test'}"></i>
+                <i class="icon" ng-class="{'ion-monitor': type.name=='Computer', 'ion-cube': type.name=='Desk', 'ion-compose': type.name=='test', 'ion-trophy': type.name=='Office Chair'}"></i>
                 <h2>{{type.name}}</h2>
                 <p>Count: {{type.items.length}}</p>
                 <i class="icon" ng-class="type.isOpen ? 'ion-ios-arrow-up' : 'ion-ios-arrow-down'"></i>
