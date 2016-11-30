@@ -258,6 +258,7 @@
             getRoomItemsApi(vm.scanSettings.room.id)
                 .then(function success(items) {
                     if(items.length > 0) {
+                        vm.hasItemsInRoom = true;
                         sortItemsByType(items);
                     } else {
                         vm.hasItemsInRoom = false;
@@ -432,6 +433,7 @@
             vm.title = 'Set Scan Settings';
             vm.scanSettings.room = null;
             vm.scanSettings.set = false;
+            vm.hasItemsInRoom = true;
             vm.room = {
                 inRoom: {},
                 inWrongRoom: []
