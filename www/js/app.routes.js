@@ -6,9 +6,16 @@
         .config(['$stateProvider', '$urlRouterProvider', AppRoutes]);
 
     function AppRoutes($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.otherwise('/app/scan-items');
+        $urlRouterProvider.otherwise('/login');
 
         $stateProvider
+            .state('login', {
+                url: '/login',
+                templateUrl: 'templates/login.html',
+                controller: 'LoginController',
+                controllerAs: 'vm'
+            })
+
             .state('app', {
                 url: '/app',
                 abstract: true,
