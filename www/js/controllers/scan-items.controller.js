@@ -3,9 +3,9 @@
 
     angular
         .module('app.controllers')
-        .controller('ScanItemsController', ['$rootScope', '$scope', '$window', '$state', '$q', '$timeout', '$ionicModal', 'Items', 'Departments', 'Buildings', 'Rooms', ScanItemsController]);
+        .controller('ScanItemsController', ['$rootScope', '$scope', '$window', '$state', '$q', '$ionicModal', 'Items', 'Departments', 'Buildings', 'Rooms', ScanItemsController]);
 
-    function ScanItemsController($rootScope, $scope, $window, $state, $q, $timeout, $ionicModal, Items, Departments, Buildings, Rooms) {
+    function ScanItemsController($rootScope, $scope, $window, $state, $q, $ionicModal, Items, Departments, Buildings, Rooms) {
         var vm = this;
 
         //// GLOBALS ////
@@ -20,11 +20,7 @@
 
         var editedItem = {};
 
-        // DEVELOPMENT ONLY
-        // WAITING SO THE JWT TOKEN IS SET BEFORE CALLING
-        $timeout(function() {
-            onEnter();
-        }, 1000);
+        onEnter();
 
         //// INITIALIZATION FUNCTIONS ////
 

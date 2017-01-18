@@ -3,9 +3,9 @@
 
     angular
         .module('app.controllers')
-        .controller('SearchItemsController', ['$state', '$q', '$timeout', 'Items', 'Departments', 'Buildings', 'Rooms', SearchItemsController]);
+        .controller('SearchItemsController', ['$state', '$q', 'Items', 'Departments', 'Buildings', 'Rooms', SearchItemsController]);
 
-    function SearchItemsController($state, $q, $timeout, Items, Departments, Buildings, Rooms) {
+    function SearchItemsController($state, $q, Items, Departments, Buildings, Rooms) {
         var vm = this;
 
         onEnter();

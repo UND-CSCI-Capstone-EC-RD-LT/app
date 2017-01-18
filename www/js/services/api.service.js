@@ -9,7 +9,9 @@
 
         var sailsUrl = 'http://54.243.4.179/v1';
 
-        var errorTypes = {};
+        var errorTypes = {
+            E_USER_NOT_FOUND: 'E_USER_NOT_FOUND'
+        };
 
         // Creates a new session on the server, returning the session ID
         function login(email, password) {
@@ -24,7 +26,8 @@
             }).then(function success(res) {
                 if(res.data) {
                     //Authentication Token
-                    $http.defaults.headers.common.Authorization = 'JWT ' + res.data.data.token;
+                    $window.sessionStorage.token = res.data.data.token
+                    setToken();
                     return;
                 } else {
                     return $q.reject(res.data);
@@ -37,10 +40,26 @@
             });
         }
 
+        // TODO: Check if token is expired
+        function setToken() {
+            if($window.sessionStorage.token) {
+                $http.defaults.headers.common.Authorization = 'JWT ' + $window.sessionStorage.token;
+            }
+        }
+
+        // TODO: Check if token is expired
+        function removeToken() {
+            if($window.sessionStorage.token) {
+                delete $window.sessionStorage.token;
+            }
+        }
+
         return {
             sailsUrl: sailsUrl,
             errorTypes: errorTypes,
-            login: login
+            login: login,
+            setToken: setToken,
+            removeToken: removeToken
         };
     }
 })();

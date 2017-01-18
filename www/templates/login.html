@@ -1,25 +1,41 @@
-<ion-modal-view>
-  <ion-header-bar>
-    <h1 class="title">Login</h1>
-    <div class="buttons">
-      <button class="button button-clear" ng-click="closeLogin()">Close</button>
-    </div>
-  </ion-header-bar>
-  <ion-content>
-    <form ng-submit="doLogin()">
-      <div class="list">
-        <label class="item item-input">
-          <span class="input-label">Username</span>
-          <input type="text" ng-model="loginData.username">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">Password</span>
-          <input type="password" ng-model="loginData.password">
-        </label>
-        <label class="item">
-          <button class="button button-block button-positive" type="submit">Log in</button>
-        </label>
-      </div>
-    </form>
-  </ion-content>
-</ion-modal-view>
+<ion-view view-title="Login" hide-nav-bar="true" class="Login">
+
+    <!-- Content -->
+    <ion-content scroll="false" class="fullscreen">
+        <div ng-show="vm.render">
+            <div class="center-row">
+                <!-- Login Box -->
+                <div class="card">
+                    <h2>UND IMS</h2>
+                    <form name="vm.loginForm" novalidate>
+                        <ion-list>
+
+                            <!-- Username -->
+                            <ion-item class="line">
+                                <label class="item-input">
+                                    <input type="text" name="email" placeholder="Email" ng-required="true" ng-model="vm.email" ng-keydown="vm.clearIsIncorrect()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                                </label>
+                            </ion-item>
+
+                            <!-- Password -->
+                            <ion-item class="line">
+                                <label class="item-input">
+                                    <input type="password" name="password" placeholder="Password" ng-required="true" ng-model="vm.password" ng-keydown="vm.clearIsIncorrect()" />
+                                </label>
+                            </ion-item>
+
+                            <!-- Remember Me -->
+                            <ion-item class="line" ng-if="!vm.hideRememberMe">
+                                <ion-toggle class="like-textbox" name="rememberMe" ng-model="vm.rememberMe" toggle-class="toggle-und">Remember Me</ion-toggle>
+                            </ion-item>
+                        </ion-list>
+
+                        <!-- Login Button -->
+                        <p class="incorrect-credentials" ng-if="vm.isIncorrect">The email and/or password are incorrect.</p>
+                        <button class="button button-block button-ims-blue" ng-click="vm.login()" ng-disabled="!vm.loginForm.$valid">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
