@@ -8,20 +8,35 @@ Global packages required:
 ```
 npm install -g cordova ionic grunt
 ```
-Switch to app-dev branch
-Install Dependencies and Restore Project
+Clone the repository
 ```
-npm install
-bower install
-grunt
-ionic state restore
+git clone git@github.com:UND-CSCI-Capstone-EC-RD-LT/app.git
+cd app
 ```
-You will want to have two bashes open, one for grunt watch and another for ionic serve.
+### Building the Mobile App
+Run mobile app in web browser
+```
+npm run web
+```
+You will want to have two bashes open, one for grunt watch and another for npm run web.
+
 Run grunt watch to watch the js and css files for changes to rebuild
 ```
 grunt watch
 ```
-Run ionic serve to serve the mobile app to your browser on localhost
+Build production version
+
+**Windows can only build Android and Mac can build Android and iOS**
 ```
-ionic serve
+npm run build-production-windows
+or
+npm run build-production-mac
+```
+Build development version
+
+**Windows can only build Android and Mac can build Android and iOS**
+```
+npm run build-dev-windows
+or
+npm run build-dev-mac
 ```
