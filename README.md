@@ -2,11 +2,15 @@
 
 ### Working with Mobile App
 Global packages required:
+* [NodeJS](http://nodejs.org/)
+* [npm](https://www.npmjs.com/)
 * [Cordova](https://cordova.apache.org/)
 * [Ionic](http://ionicframework.com/)
+* [Bower](http://bower.io/)
 * [Grunt](http://gruntjs.com/)
+* [grunt-cli](https://github.com/gruntjs/grunt-cli)
 ```
-npm install -g cordova ionic grunt
+npm install -g cordova ionic grunt grunt-cli
 ```
 Clone the repository
 ```
