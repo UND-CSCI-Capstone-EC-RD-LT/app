@@ -18,12 +18,12 @@
         // Holds new item data
         var newItem = {};
 
+        // Holds data for item being edited
         var editedItem = {};
 
         onEnter();
 
         //// INITIALIZATION FUNCTIONS ////
-
         function onEnter(isRefresh) {
             vm.render = false;
 
@@ -69,6 +69,7 @@
             var d1 = $q.defer();
             var d2 = $q.defer();
 
+            // Get all departments that the user has correct permission in
             getDepartmentsApi()
                 .then(function success(departments) {
                     vm.departments = departments;
@@ -78,6 +79,7 @@
                     d1.reject();
                 });
 
+            // Get all possible item types for a department
             getItemTypesApi()
                 .then(function success(types) {
                     for (var i = 0; i < types.length; i++) {
@@ -269,15 +271,18 @@
                 });
         };
 
+        // Resets view for new scan
         vm.newScan = function() {
             hideScanSettingsModal();
             resetScanSettings();
         };
 
+        // Initializes the barcode scanner
         vm.startScan = function(){
             startScan();
         };
 
+        // Goes to edit view with item id
         vm.editItem = function(item) {
             editedItem = item;
             $state.go('^.edit-item', {itemId: item.id});
@@ -307,6 +312,7 @@
             }
         }
 
+        // Shows dialog for creating a new item while scanning
         function showNewItemModal() {
             if(!newItemModal) {
                 $ionicModal.fromTemplateUrl('templates/modals/new-item.html', {
@@ -329,6 +335,7 @@
             }
         }
 
+        // Hides the scan settings modal
         function hideScanSettingsModal() {
             if(scanSettingsModal){
                 scanSettingsModal.hide();
@@ -337,7 +344,7 @@
 
         //// END MODAL FUNCTIONS ////
 
-        // TODO update checkItem function to work with new sorted item list by item type
+        // Check if the item is in the current room
         function checkItem(barcode) {
             var item = null;
             var type = null;
@@ -357,6 +364,7 @@
             return item;
         }
 
+        // Brings up camera to scan barcode or scans manually entered barcode
         function startScan() {
             if($window.cordova) {
                 cordova.plugins.barcodeScanner.scan(
@@ -382,6 +390,8 @@
             }
         }
 
+        // Receive a barcode, checking if in correct room, item type exits, or in wrong room
+        // For single item scans it goes directly to the edit item page
         function saveItem(barcode) {
             // Check if the item scanned is already in the room or not
             var item = checkItem(barcode);
@@ -425,6 +435,7 @@
             }
         }
 
+        // Resets the view
         function resetScanSettings() {
             vm.title = 'Set Scan Settings';
             vm.scanSettings.room = null;
@@ -449,6 +460,7 @@
                 });
         }
 
+        // Groups items by type in an array
         function sortItemsByType(items) {
             for (var i = 0; i < items.length; i++) {
                 vm.room.inRoom[items[i].type].items.push(items[i]);

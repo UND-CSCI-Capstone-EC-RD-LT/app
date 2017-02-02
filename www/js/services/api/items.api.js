@@ -3,10 +3,11 @@
 
     angular
         .module('app.api')
-        .factory('Items', ['$rootScope', '$http', '$q', 'API', Items]);
+        .factory('Items', ['$http', '$q', 'API', Items]);
 
-    function Items($rootScope, $http, $q, API) {
+    function Items($http, $q, API) {
 
+        // Gets specific item
         function getItem(itemId) {
             return $http.get(API.sailsUrl + '/items/' + itemId)
                 .then(function success(res) {
@@ -23,6 +24,7 @@
                 });
         }
 
+        // Get an item by its barcode
         function getItemBarcode(barcode) {
             return $http.get(API.sailsUrl + '/items/barcode/' + barcode)
                 .then(function success(res) {
@@ -39,6 +41,7 @@
                 });
         }
 
+        // Returns all items in a specific room
         function searchItems(departmentId, buildingId, roomId) {
             var route = API.sailsUrl + '/items/search/' + departmentId
             
@@ -64,6 +67,7 @@
                 });
         }
 
+        // Creates a new item
         function createItem(item) {
             return $http({
                 method: 'POST',
@@ -89,6 +93,7 @@
             });
         }
 
+        // Updates specific item
         function updateItem(item) {
             return $http({
                 method: 'PUT',
@@ -115,6 +120,7 @@
             });
         }
 
+        // Gets all item types
         function getItemTypes() {
             return $http.get(API.sailsUrl + '/itemtypes/')
                 .then(function success(res) {

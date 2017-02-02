@@ -3,9 +3,9 @@
 
     angular
         .module('app.controllers')
-        .controller('AppController', ['$rootScope', '$state', 'API', AppController]);
+        .controller('AppController', ['$state', 'API', AppController]);
 
-    function AppController($rootScope, $state, API) {
+    function AppController($state, API) {
         var vm = this;
 
         API.setToken();
