@@ -46,6 +46,7 @@
 
         //// VIEW MODEL FUNCTIONS ////
 
+        // Calls login api to attempt to log the user in
         vm.login = function() {
             // Clear the password from the view
             var password = vm.password;
@@ -61,6 +62,7 @@
                 });
         }
 
+        // Hides incorrect credentials message
         vm.clearIsIncorrect = function() {
             vm.isIncorrect = false;
         }

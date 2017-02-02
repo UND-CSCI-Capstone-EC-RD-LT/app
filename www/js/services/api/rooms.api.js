@@ -3,10 +3,11 @@
 
     angular
         .module('app.api')
-        .factory('Rooms', ['$rootScope', '$http', '$q', 'API', Rooms]);
+        .factory('Rooms', ['$http', '$q', 'API', Rooms]);
 
-    function Rooms($rootScope, $http, $q, API) {
+    function Rooms($http, $q, API) {
 
+        // Get rooms in building
         function getBuildingRooms(buildingId) {
             return $http.get(API.sailsUrl + '/rooms/building/'+buildingId)
                 .then(function success(res) {
@@ -23,6 +24,7 @@
                 });
         }
 
+        // Get all items in a room
         function getItems(roomId) {
             return $http.get(API.sailsUrl + '/rooms/' + roomId + '/item')
                 .then(function success(res) {
@@ -39,52 +41,9 @@
                 });
         }
 
-        function updateExample(example) {
-            return $http({
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
-                data: 'example',
-                url: (API.sailsUrlUrl + 'exampleRoute/exampleFunction')
-            }).then(function success(res) {
-                if(res.data) {
-                    return;
-                } else {
-                    return $q.reject(res.data);
-                }
-            }).catch(function error(reason) {
-                return $q.reject({
-                    error: 'Error with API request.',
-                    origErr: reason
-                });
-            });
-        }
-
-        function insertExample(exampleId, examplePayload) {
-            return $http({
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
-                data: 'example',
-                url: (API.sailsUrl + 'exampleRoute/exampleFunction')
-            }).then(function success(res) {
-                if(res.data) {
-                    return;
-                } else {
-                    return $q.reject(res.data);
-                }
-            }).catch(function error(reason) {
-                return $q.reject({
-                    error: 'Error with API request.',
-                    origErr: reason
-                });
-            });
-        }
-
-
         return {
             getBuildingRooms : getBuildingRooms,
-            getItems         : getItems,
-            updateExample    : updateExample,
-            insertExample    : insertExample
+            getItems         : getItems
         };
     }
 })();
