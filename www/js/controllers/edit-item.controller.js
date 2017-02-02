@@ -3,7 +3,7 @@
 
     angular
         .module('app.controllers')
-        .controller('EditItemController', ['$timeout', '$state', '$stateParams', '$q', 'Items', 'Departments', 'Buildings', 'Rooms', 'API', EditItemController]);
+        .controller('EditItemController', ['$timeout', '$state', '$stateParams', '$q', 'Items', 'Departments', 'Buildings', 'Rooms', EditItemController]);
 
     function EditItemController($timeout, $state, $stateParams, $q, Items, Departments, Buildings, Rooms) {
         var vm = this;

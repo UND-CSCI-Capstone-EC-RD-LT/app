@@ -50,7 +50,7 @@
         // TODO: Check if token is expired
         function removeToken() {
             if($window.sessionStorage.token) {
-                $http.defaults.headers.common.Authorization = 'JWT 1234' ;
+                $http.defaults.headers.common.Authorization = null;
                 delete $window.sessionStorage.token;
             }
         }

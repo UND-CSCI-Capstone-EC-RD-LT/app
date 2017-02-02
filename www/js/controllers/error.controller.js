@@ -3,9 +3,9 @@
 
     angular
         .module('app.controllers')
-        .controller('ErrorController', ['$stateParams', '$state', 'API', ErrorController]);
+        .controller('ErrorController', ['$stateParams', '$state', '$ionicHistory', 'API', ErrorController]);
 
-    function ErrorController($stateParams, $state, API) {
+    function ErrorController($stateParams, $state, $ionicHistory, API) {
         var vm = this;
 
         onEnter();
@@ -24,7 +24,7 @@
 
         vm.returnLogin = function() {
             API.removeToken();
-            $state.go('login');
+            $ionicHistory.clearCache().then(function(){ $state.go('login') });
         }
     }
 })();
