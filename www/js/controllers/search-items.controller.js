@@ -37,8 +37,6 @@
             getDepartmentsApi()
                 .then(function success(departments) {
                     vm.departments = departments;
-                }).catch(function error() {
-                    // error handling
                 });
 
         }
@@ -53,7 +51,8 @@
                     return departments;
                 }).catch(function error(reason) {
                     //error handling
-                    return $q.reject();
+                    $state.go('error', {reason: reason});
+                    return $q.reject(reason);
                 });
         }
 
@@ -63,6 +62,7 @@
                     return buildings;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -73,6 +73,7 @@
                     return rooms;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -87,8 +88,6 @@
             getDepartmentBuildingsApi(vm.search.department.id)
                 .then(function success(buildings) {
                     vm.buildings = buildings;
-                }).catch(function error() {
-                    // error handling
                 });
         };
 
@@ -97,8 +96,6 @@
             getBuildingRoomsApi(vm.search.building.id)
                 .then(function success(rooms) {
                     vm.rooms = rooms;
-                }).catch(function error() {
-                    // error handling
                 });
         };
 

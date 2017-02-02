@@ -38,6 +38,8 @@
                         vm.isIncorrect = true;
                         vm.errorMessage = reason.origErr.data.message;
                         return $q.reject();
+                    } else {
+                        $state.go('error', {reason: reason});
                     }
                 });
         }

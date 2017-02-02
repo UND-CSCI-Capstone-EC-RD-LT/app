@@ -52,6 +52,7 @@
                             items: []
                         }
                     }
+
                     searchItemsApi(departmentId, buildingId, roomId)
                         .then(function success(items) {
                             if(items.length > 0) {
@@ -59,11 +60,7 @@
                             } else {
                                 vm.foundItems = false;
                             }
-                        }).catch(function error() {
-                            // error handling
                         });
-                }).catch(function error() {
-                    // error handling
                 });
 
         }
@@ -83,6 +80,7 @@
                     return items;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -93,6 +91,7 @@
                     return types;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -103,6 +102,7 @@
                     return item;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -135,7 +135,7 @@
 
         // Returning to scan state from edit state and refreshing item list for changes
         $rootScope.$on('$stateChangeSuccess', function (ev, toState, toParams, fromState, fromParams) {
-            if(fromState.name == 'app.edit-item') {
+            if(fromState.name == 'app.edit-item' && toState.name == 'app.search-items.view-items') {
                 getItemApi(fromParams.itemId)
                     .then(function success(item) {
                         if(item.departmentId != departmentId){

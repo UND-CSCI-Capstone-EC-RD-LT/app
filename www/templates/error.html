@@ -1,0 +1,12 @@
+<ion-nav-bar class="bar-ims">
+    <ion-nav-title>Error</ion-nav-title>
+</ion-nav-bar>
+<ion-view view-title="Error" class="Error">
+    <ion-content>
+        <div ng-show="vm.render">
+                <h2>{{ vm.reason.origErr.status }}</h2>
+                <h4>{{ vm.reason.error }}</h4>
+                <a href="#" class="button button-block button-ims-blue" ng-click="vm.returnLogin()">Return to login</a>
+        </div>
+    </ion-content>
+</ion-view>

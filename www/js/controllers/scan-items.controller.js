@@ -73,9 +73,6 @@
                 .then(function success(departments) {
                     vm.departments = departments;
                     d1.resolve();
-                }).catch(function error() {
-                    // error handling
-                    d1.reject();
                 });
 
             getItemTypesApi()
@@ -91,16 +88,11 @@
                     }
 
                     d2.resolve();
-                }).catch(function error() {
-                    // error handling
-                    d2.reject();
                 });
 
              $q.all([d1.promise, d2.promise])
                 .then(function success() {
 
-                }).catch(function error() {
-                    // error handling
                 });
 
         }
@@ -115,6 +107,7 @@
                     return departments;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -125,6 +118,7 @@
                     return buildings;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -135,6 +129,7 @@
                     return rooms;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -145,6 +140,7 @@
                     return items;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -155,6 +151,7 @@
                     return types;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -165,6 +162,7 @@
                     return item;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -175,6 +173,7 @@
                     return item;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -186,6 +185,7 @@
                 })
                 .catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -202,8 +202,6 @@
             getDepartmentBuildingsApi(vm.scanSettings.department.id)
                 .then(function success(buildings) {
                     vm.buildings = buildings;
-                }).catch(function error() {
-                    // error handling
                 });
         };
 
@@ -214,8 +212,6 @@
             getBuildingRoomsApi(vm.scanSettings.building.id)
                 .then(function success(rooms) {
                     vm.rooms = rooms;
-                }).catch(function error() {
-                    // error handling
                 });
         };
 
@@ -245,8 +241,6 @@
                     }
                     hideNewItemModal();
                     newItem = {};
-                }).catch(function error() {
-                    // error handling
                 });
         };
 
@@ -264,8 +258,6 @@
                     if(vm.scanSettings.scanType == 'Single Item' && $window.cordova) {
                         startScan();
                     }
-                }).catch(function error() {
-                    // error handling
                 });
         };
 
@@ -411,8 +403,6 @@
                             };
                             showNewItemModal();
                         }
-                    }).catch(function error() {
-                        // error handling
                     });
             } else {
                 if($window.cordova){
@@ -457,7 +447,7 @@
 
         // Returning to scan state from edit state and refreshing item list for changes
         $rootScope.$on('$stateChangeSuccess', function (ev, toState, toParams, fromState, fromParams) {
-            if(fromState.name == 'app.edit-item') {
+            if(fromState.name == 'app.edit-item' && toState.name == 'app.scan-items') {
                 if(vm.scanSettings.scanType == 'Single Item') {
                     resetScanSettings();
                 } else {
