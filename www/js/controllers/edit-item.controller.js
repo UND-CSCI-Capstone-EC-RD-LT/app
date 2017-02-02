@@ -57,9 +57,6 @@
                                 }
                             }
                             d1.resolve();
-                        }).catch(function error() {
-                            // error handling
-                            d1.reject();
                         });
 
                     // Getting buildings in the selected department
@@ -75,9 +72,6 @@
                                 }
                             }
                             d2.resolve();
-                        }).catch(function error() {
-                            // error handling
-                            d2.reject();
                         });
 
                     // Getting rooms in selected building
@@ -93,9 +87,6 @@
                                 }
                             }
                             d3.resolve();
-                        }).catch(function error() {
-                            // error handling
-                            d3.reject();
                         });
 
                     // Getting all item types
@@ -111,20 +102,13 @@
                                 }
                             }
                             d4.resolve();
-                        }).catch(function error() {
-                            // error handling
-                            d4.reject();
                         });
 
                     $q.all([d1.promise, d2.promise, d3.promise, d4.promise])
                         .then(function success() {
                             vm.render = true;
-                        }).catch(function error() {
-                            // error handling
                         });
 
-                }).catch(function error() {
-                    // error handling
                 });
         }
 
@@ -138,6 +122,7 @@
                     return item;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -148,6 +133,7 @@
                     return departments;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -158,6 +144,7 @@
                     return buildings;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -168,6 +155,7 @@
                     return rooms;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -178,6 +166,7 @@
                     return types;
                 }).catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }
@@ -186,6 +175,7 @@
             return Items.updateItem(item)
                 .catch(function error(reason) {
                     //error handling
+                    $state.go('error', {reason: reason});
                     return $q.reject();
                 });
         }

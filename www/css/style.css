@@ -306,3 +306,11 @@
     padding: 0;
     border-radius: 0;
 }
+
+/* Create separation around the content */
+.Error div {
+    margin: 10px;
+}
+.Error ion-content {
+    top: 44px;
+}

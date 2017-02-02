@@ -16,6 +16,20 @@
                 controllerAs: 'vm'
             })
 
+            .state('error', {
+                url: '/error',
+                params: {
+                    reason: {
+                        type: 'object',
+                        value: {}
+                    }
+                },
+                templateUrl: 'templates/error.html',
+                controller: 'ErrorController',
+                controllerAs: 'vm'
+            })
+
+
             .state('app', {
                 url: '/app',
                 abstract: true,

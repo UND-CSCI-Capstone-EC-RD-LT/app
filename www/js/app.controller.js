@@ -3,16 +3,18 @@
 
     angular
         .module('app.controllers')
-        .controller('AppController', ['$state', 'API', AppController]);
 
-    function AppController($state, API) {
+        .controller('AppController', ['$rootScope', '$state', '$ionicHistory', 'API', AppController]);
+
+    function AppController($rootScope, $state, $ionicHistory, API) {
+
         var vm = this;
 
         API.setToken();
 
         vm.logout = function() {
         	API.removeToken();
-        	$state.go('login');
+        	$ionicHistory.clearCache().then(function(){ $state.go('login') });
         }
     }
 })();
