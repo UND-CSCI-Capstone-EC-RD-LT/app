@@ -3,9 +3,11 @@
 
     angular
         .module('app.controllers')
+
         .controller('AppController', ['$rootScope', '$state', '$ionicHistory', 'API', AppController]);
 
     function AppController($rootScope, $state, $ionicHistory, API) {
+
         var vm = this;
 
         API.setToken();

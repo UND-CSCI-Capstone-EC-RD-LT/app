@@ -43,6 +43,7 @@
 
         // Retrieves the data from the db
         function getData(isRefresh) {
+            // Getting items and grouping them by item type
             getItemTypesApi()
                 .then(function success(types) {
                     for (var i = 0; i < types.length; i++) {
@@ -111,6 +112,7 @@
 
         //// VIEW MODEL FUNCTIONS ////
 
+        // Passes selected item to edit state
         vm.editItem = function(item) {
             editedItem = item;
             $state.go('app.edit-item', {itemId: item.id});
@@ -118,12 +120,14 @@
 
         //// END VIEW MODEL FUNCTIONS ////
 
+        // Groups items by type into an array
         function sortItemsByType(items) {
             for (var i = 0; i < items.length; i++) {
                 vm.types[items[i].type].items.push(items[i]);
             }
         }
 
+        // Remove edited item from its old type
         function removeItemFromType() {
             for (var i = 0; i < vm.types[editedItem.type].items.length; i++) {
                 if(vm.types[editedItem.type].items[i].id === editedItem.id) {

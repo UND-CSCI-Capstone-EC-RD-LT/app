@@ -8,9 +8,7 @@
     function EditItemController($timeout, $state, $stateParams, $q, Items, Departments, Buildings, Rooms) {
         var vm = this;
 
-       // $timeout(function() {
         onEnter();
-        // }, 1000);
 
         //// INITIALIZATION FUNCTIONS ////
 
@@ -35,6 +33,7 @@
 
         // Retrieves the data from the db
         function getData(isRefresh) {
+            // Retrieving data for item id passed in
             getItemApi($stateParams.itemId)
                 .then(function success(item) {
                     vm.item = item;
@@ -60,6 +59,7 @@
                             d1.resolve();
                         });
 
+                    // Getting buildings in the selected department
                     getDepartmentBuildingsApi(vm.item.departmentId)
                         .then(function success(buildings) {
                             vm.buildings = buildings;
@@ -74,6 +74,7 @@
                             d2.resolve();
                         });
 
+                    // Getting rooms in selected building
                     getBuildingRoomsApi(vm.item.buildingId)
                         .then(function success(rooms) {
                             vm.rooms = rooms;
@@ -88,6 +89,7 @@
                             d3.resolve();
                         });
 
+                    // Getting all item types
                     getItemTypesApi()
                         .then(function success(types) {
                             vm.types = types;
@@ -196,6 +198,7 @@
             vm.editItem = false;
         };
 
+        // If the form has been changed update the item
         vm.updateItem = function(form) {
             if(form.$dirty) {
                 updateItemApi(vm.item)
@@ -207,6 +210,7 @@
             }
         };
 
+        // Getting buildings for newly selected department
         vm.setItemDepartment = function() {
             // reset the building and room when new department is selected
             vm.item.building = null;
@@ -220,6 +224,7 @@
                 });
         };
 
+        // Getting rooms for newly selected building
         vm.setItemBuilding = function() {
             // reset the room when new building is selected
             vm.item.room = null;

@@ -33,7 +33,7 @@
 
         // Retrieves the data from the db
         function getData(isRefresh) {
-
+            // Getting all departments
             getDepartmentsApi()
                 .then(function success(departments) {
                     vm.departments = departments;
@@ -82,6 +82,7 @@
 
         //// VIEW MODEL FUNCTIONS ////
 
+        // Getting buildings for selected department
         vm.setDepartment = function() {
             vm.search.building = null;
             vm.search.room = null;
@@ -91,6 +92,7 @@
                 });
         };
 
+        // Getting rooms for selected building
         vm.setBuilding = function() {
             vm.search.room = null;
             getBuildingRoomsApi(vm.search.building.id)
@@ -99,10 +101,12 @@
                 });
         };
 
+        // Resets the search criteria
         vm.clearSearch = function() {
             onEnter();
         };
 
+        // Passes search criteria to view items view
         vm.searchItems = function() {
             $state.go('.view-items', {
                 departmentId: vm.search.department.id,

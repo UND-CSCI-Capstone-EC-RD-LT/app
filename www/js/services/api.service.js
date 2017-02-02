@@ -40,14 +40,14 @@
             });
         }
 
-        // TODO: Check if token is expired
+        // TODO: Check if token is expired?
         function setToken() {
             if($window.sessionStorage.token) {
                 $http.defaults.headers.common.Authorization = 'JWT ' + $window.sessionStorage.token;
             }
         }
 
-        // TODO: Check if token is expired
+        // TODO: Check if token is expired?
         function removeToken() {
             if($window.sessionStorage.token) {
                 $http.defaults.headers.common.Authorization = null;
