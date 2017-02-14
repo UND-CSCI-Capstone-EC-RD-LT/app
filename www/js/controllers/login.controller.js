@@ -13,7 +13,6 @@
         //// INITIALIZATION FUNCTIONS ////
 
         function onEnter(isRefresh) {
-            console.log('Login Controller');
             vm.render = false;
 
             vm.hideRememberMe = true;
