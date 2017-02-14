@@ -25,9 +25,11 @@
                 url: (sailsUrl + '/auth/signin')
             }).then(function success(res) {
                 if(res.data) {
+                    console.log(res.data);
                     //Authentication Token
                     $window.sessionStorage.token = res.data.data.token
                     setToken();
+                    setUserId(res.data.data.user.id);
                     return;
                 } else {
                     return $q.reject(res.data);
@@ -55,12 +57,22 @@
             }
         }
 
+        function setUserId(userId) {
+            $window.sessionStorage.userId = userId
+        }
+
+        function getUserId(userId) {
+            return $window.sessionStorage.userId;
+        }
+
         return {
             sailsUrl: sailsUrl,
             errorTypes: errorTypes,
             login: login,
             setToken: setToken,
-            removeToken: removeToken
+            removeToken: removeToken,
+            setUserId: setUserId,
+            getUserId: getUserId
         };
     }
 })();
