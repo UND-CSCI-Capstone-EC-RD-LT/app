@@ -3,9 +3,9 @@
 
     angular
         .module('app.controllers')
-        .controller('SearchItemsController', ['$state', '$q', 'Items', 'Departments', 'Buildings', 'Rooms', SearchItemsController]);
+        .controller('SearchItemsController', ['$state', '$q', '$ionicHistory', 'Items', 'Departments', 'Buildings', 'Rooms', SearchItemsController]);
 
-    function SearchItemsController($state, $q, Items, Departments, Buildings, Rooms) {
+    function SearchItemsController($state, $q, $ionicHistory, Items, Departments, Buildings, Rooms) {
         var vm = this;
 
         onEnter();
@@ -51,7 +51,7 @@
                     return departments;
                 }).catch(function error(reason) {
                     //error handling
-                    $state.go('error', {reason: reason});
+                    $ionicHistory.clearCache().then(function(){ $state.go('error', {reason: reason}); });
                     return $q.reject(reason);
                 });
         }
@@ -62,7 +62,7 @@
                     return buildings;
                 }).catch(function error(reason) {
                     //error handling
-                    $state.go('error', {reason: reason});
+                    $ionicHistory.clearCache().then(function(){ $state.go('error', {reason: reason}); });
                     return $q.reject();
                 });
         }
@@ -73,7 +73,7 @@
                     return rooms;
                 }).catch(function error(reason) {
                     //error handling
-                    $state.go('error', {reason: reason});
+                    $ionicHistory.clearCache().then(function(){ $state.go('error', {reason: reason}); });
                     return $q.reject();
                 });
         }

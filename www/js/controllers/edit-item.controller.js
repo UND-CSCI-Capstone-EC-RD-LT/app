@@ -3,9 +3,9 @@
 
     angular
         .module('app.controllers')
-        .controller('EditItemController', ['$timeout', '$state', '$stateParams', '$q', 'Items', 'Departments', 'Buildings', 'Rooms', EditItemController]);
+        .controller('EditItemController', ['$timeout', '$state', '$stateParams', '$q', '$ionicHistory', 'Items', 'Departments', 'Buildings', 'Rooms', EditItemController]);
 
-    function EditItemController($timeout, $state, $stateParams, $q, Items, Departments, Buildings, Rooms) {
+    function EditItemController($timeout, $state, $stateParams, $q, $ionicHistory, Items, Departments, Buildings, Rooms) {
         var vm = this;
 
         onEnter();
@@ -122,7 +122,7 @@
                     return item;
                 }).catch(function error(reason) {
                     //error handling
-                    $state.go('error', {reason: reason});
+                    $ionicHistory.clearCache().then(function(){ $state.go('error', {reason: reason}); });
                     return $q.reject();
                 });
         }
@@ -133,7 +133,7 @@
                     return departments;
                 }).catch(function error(reason) {
                     //error handling
-                    $state.go('error', {reason: reason});
+                    $ionicHistory.clearCache().then(function(){ $state.go('error', {reason: reason}); });
                     return $q.reject();
                 });
         }
@@ -144,7 +144,7 @@
                     return buildings;
                 }).catch(function error(reason) {
                     //error handling
-                    $state.go('error', {reason: reason});
+                    $ionicHistory.clearCache().then(function(){ $state.go('error', {reason: reason}); });
                     return $q.reject();
                 });
         }
@@ -155,7 +155,7 @@
                     return rooms;
                 }).catch(function error(reason) {
                     //error handling
-                    $state.go('error', {reason: reason});
+                    $ionicHistory.clearCache().then(function(){ $state.go('error', {reason: reason}); });
                     return $q.reject();
                 });
         }
@@ -166,7 +166,7 @@
                     return types;
                 }).catch(function error(reason) {
                     //error handling
-                    $state.go('error', {reason: reason});
+                    $ionicHistory.clearCache().then(function(){ $state.go('error', {reason: reason}); });
                     return $q.reject();
                 });
         }
@@ -175,7 +175,7 @@
             return Items.updateItem(item)
                 .catch(function error(reason) {
                     //error handling
-                    $state.go('error', {reason: reason});
+                    $ionicHistory.clearCache().then(function(){ $state.go('error', {reason: reason}); });
                     return $q.reject();
                 });
         }

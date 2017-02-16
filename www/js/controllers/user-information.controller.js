@@ -3,9 +3,9 @@
 
     angular
         .module('app.controllers')
-        .controller('UserInformationController', ['$state', '$q', 'Users', UserInformationController]);
+        .controller('UserInformationController', ['$state', '$q', '$ionicHistory', 'Users', UserInformationController]);
 
-    function UserInformationController($state, $q, Users) {
+    function UserInformationController($state, $q, $ionicHistory, Users) {
         var vm = this;
 
         onEnter();
@@ -40,7 +40,7 @@
                     return user;
                 }).catch(function error(reason) {
                     //error handling
-                    $state.go('error', {reason: reason});
+                    $ionicHistory.clearCache().then(function(){ $state.go('error', {reason: reason}); });
                     return $q.reject();
                 });
         }
