@@ -25,7 +25,6 @@
                 url: (sailsUrl + '/auth/signin')
             }).then(function success(res) {
                 if(res.data) {
-                    console.log(res.data);
                     //Authentication Token
                     $window.sessionStorage.token = res.data.data.token
                     setToken();
