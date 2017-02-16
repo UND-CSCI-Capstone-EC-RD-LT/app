@@ -3,9 +3,9 @@
 
     angular
         .module('app.controllers')
-        .controller('LoginController', ['$rootScope', '$state', '$q', 'API', LoginController]);
+        .controller('LoginController', ['$rootScope', '$state', '$q', '$ionicHistory', 'API', LoginController]);
 
-    function LoginController($rootScope, $state, $q, API) {
+    function LoginController($rootScope, $state, $q, $ionicHistory, API) {
         var vm = this;
 
         onEnter();
@@ -38,7 +38,7 @@
                         vm.errorMessage = reason.origErr.data.message;
                         return $q.reject();
                     } else {
-                        $state.go('error', {reason: reason});
+                        $ionicHistory.clearCache().then(function(){ $state.go('error', {reason: reason}); });
                     }
                 });
         }

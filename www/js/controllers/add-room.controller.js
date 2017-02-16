@@ -3,9 +3,9 @@
 
     angular
         .module('app.controllers')
-        .controller('AddRoomController', ['$state', '$q', 'Departments', 'Buildings', 'Rooms', AddRoomController]);
+        .controller('AddRoomController', ['$state', '$q', '$ionicHistory', 'Departments', 'Buildings', 'Rooms', AddRoomController]);
 
-    function AddRoomController($state, $q, Departments, Buildings, Rooms) {
+    function AddRoomController($state, $q, $ionicHistory, Departments, Buildings, Rooms) {
         var vm = this;
 
         onEnter();
@@ -50,7 +50,7 @@
                     return departments;
                 }).catch(function error(reason) {
                     //error handling
-                    $state.go('error', {reason: reason});
+                    $ionicHistory.clearCache().then(function(){ $state.go('error', {reason: reason}); });
                     return $q.reject(reason);
                 });
         }
@@ -61,7 +61,7 @@
                     return buildings;
                 }).catch(function error(reason) {
                     //error handling
-                    $state.go('error', {reason: reason});
+                    $ionicHistory.clearCache().then(function(){ $state.go('error', {reason: reason}); });
                     return $q.reject();
                 });
         }
@@ -72,7 +72,7 @@
                     return room;
                 }).catch(function error(reason) {
                     //error handling
-                    $state.go('error', {reason: reason});
+                    $ionicHistory.clearCache().then(function(){ $state.go('error', {reason: reason}); });
                     return $q.reject();
                 });
         }
@@ -86,7 +86,6 @@
             vm.building = null;
             getDepartmentBuildingsApi(vm.department.id)
                 .then(function success(buildings) {
-                    console.log(buildings);
                     vm.buildings = buildings;
                 });
         };
