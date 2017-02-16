@@ -20,9 +20,11 @@
     	    <!-- Room -->
     	    <label class="item item-input">
                 <h2 class="input-label">Room</h2>
-                <input type="text" name="room" placeholder="Number" ng-model="vm.room" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" ng-required="true">
+                <input type="text" name="room" placeholder="Number" ng-model="vm.room" ng-keydown="vm.clearMessages()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" ng-required="true">
             </label>
     	</ion-list>
     </form>
+    <p class="success" ng-if="vm.success">Room added!</p>
+    <p class="error" ng-if="vm.error">Room already added</p>
     </ion-content>
 </ion-view>

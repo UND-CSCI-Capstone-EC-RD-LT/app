@@ -298,7 +298,7 @@
     padding: 10px;
     text-align: center;
     font-weight: 600;
-    color: #E42012;
+    color: #d32F2f;
 }
 
 /* Remove the curved border of the content */
@@ -313,4 +313,18 @@
 }
 .Error ion-content {
     top: 44px;
+}
+
+.Add-Room .error {
+    padding: 10px;
+    text-align: center;
+    font-weight: 600;
+    color: #d32F2f;
+}
+
+.Add-Room .success {
+    padding: 10px;
+    text-align: center;
+    font-weight: 600;
+    color: #2e7b32;
 }

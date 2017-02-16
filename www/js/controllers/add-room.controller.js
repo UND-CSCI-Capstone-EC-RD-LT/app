@@ -14,6 +14,8 @@
 
         function onEnter(isRefresh) {
             vm.render = false;
+            vm.success = false;
+            vm.error = false;
 
             vm.departments = null;
             vm.buildings = null;
@@ -90,12 +92,19 @@
         };
 
         // Calls add room api
-        vm.addRoom = function() {
+        vm.addRoom = function() { 
+            vm.clearMessages();  
             addRoomApi(vm.department.id, vm.building.id, vm.room)
                 .then(function success(room) {
                     vm.success = true;
                 });
         };
+
+        // Hides error/success message
+        vm.clearMessages = function() {
+            vm.success = false;
+            vm.error = false;
+        }
 
         //// END VIEW MODEL FUNCTIONS ////
     }
