@@ -3,9 +3,9 @@
 
     angular
         .module('app.controllers')
-        .controller('AddRoomController', ['$state', '$q', 'Items', 'Departments', 'Buildings', 'Rooms', AddRoomController]);
+        .controller('AddRoomController', ['$state', '$q', 'Departments', 'Buildings', 'Rooms', AddRoomController]);
 
-    function AddRoomController($state, $q, Items, Departments, Buildings, Rooms) {
+    function AddRoomController($state, $q, Departments, Buildings, Rooms) {
         var vm = this;
 
         onEnter();
