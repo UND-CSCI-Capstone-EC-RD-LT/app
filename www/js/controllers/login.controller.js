@@ -3,9 +3,9 @@
 
     angular
         .module('app.controllers')
-        .controller('LoginController', ['$rootScope', '$state', '$q', '$ionicHistory', 'API', LoginController]);
+        .controller('LoginController', ['$state', '$q', '$ionicHistory', 'API', LoginController]);
 
-    function LoginController($rootScope, $state, $q, $ionicHistory, API) {
+    function LoginController($state, $q, $ionicHistory, API) {
         var vm = this;
 
         onEnter();
@@ -55,9 +55,6 @@
 
             return loginApi(vm.email, password)
                 .then(function success(res) {
-                    $rootScope.user = {
-                        email: vm.email
-                    };
                     vm.email = '';
                     $state.go('app.scan-items');
                 });
