@@ -3,9 +3,9 @@
 
     angular
         .module('app.controllers')
-        .controller('ScanItemsController', ['$rootScope', '$scope', '$window', '$state', '$q', '$ionicModal', '$ionicHistory', 'Items', 'Departments', 'Buildings', 'Rooms', ScanItemsController]);
+        .controller('ScanItemsController', ['$rootScope', '$scope', '$window', '$state', '$q', '$ionicModal', '$ionicHistory', 'API', 'Items', 'Departments', 'Buildings', 'Rooms', ScanItemsController]);
 
-    function ScanItemsController($rootScope, $scope, $window, $state, $q, $ionicModal, $ionicHistory, Items, Departments, Buildings, Rooms) {
+    function ScanItemsController($rootScope, $scope, $window, $state, $q, $ionicModal, $ionicHistory, API, Items, Departments, Buildings, Rooms) {
         var vm = this;
 
         //// GLOBALS ////
@@ -409,7 +409,7 @@
                                 barcode: barcode,
                                 room: vm.scanSettings.room.id,
                                 type: null,
-                                creator: $rootScope.user.id
+                                creator: API.getUserId()
                             };
                             showNewItemModal();
                         }
