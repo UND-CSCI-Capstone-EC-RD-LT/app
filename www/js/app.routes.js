@@ -90,12 +90,12 @@
                 }
             })
 
-          .state('app.admin-tools', {
-                url: '/admin-tools',
+          .state('app.add-room', {
+                url: '/add-room',
                 views: {
                     'menuContent': {
-                        templateUrl: 'templates/admin-tools.html',
-                        controller: 'AdminToolsController',
+                        templateUrl: 'templates/add-room.html',
+                        controller: 'AddRoomController',
                         controllerAs: 'vm'
                     }
                 }

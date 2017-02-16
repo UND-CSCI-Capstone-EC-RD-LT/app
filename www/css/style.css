@@ -119,7 +119,7 @@
     color: #444444;
 }
 
-.Scan-Items select, .Search-Items select, .Edit-Item select, .New-Item select {
+.Scan-Items select, .Search-Items select, .Edit-Item select, .New-Item select, .Add-Room select  {
     font-size: 16px;
     color: #444444;
 }
@@ -137,7 +137,7 @@
     z-index: 0;
 }
 
-.Edit-Item .item-input input {
+.Edit-Item .item-input input, .Add-Room .item-input input {
     text-align: right;
     font-size: 16px;
     color: #444444;

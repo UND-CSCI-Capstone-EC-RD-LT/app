@@ -41,9 +41,38 @@
                 });
         }
 
+        // Creates a new room in a department building
+        function addRoom(departmentId, buildingId, room) {
+            console.log(departmentId);
+            console.log(buildingId);
+            console.log(room);
+            return $http({
+                method: 'POST',
+                headers: { 'Content-Type': 'application/form-data; charset=UTF-8' },
+                data: {
+                    departmentId: departmentId,
+                    buildingId: buildingId,
+                    room: room
+                },
+                url: (API.sailsUrl + '/rooms')
+            }).then(function success(res) {
+                if(res.data) {
+                    return res.data.data;
+                } else {
+                    return $q.reject(res.data);
+                }
+            }).catch(function error(reason) {
+                return $q.reject({
+                    error: 'Error with API request.',
+                    origErr: reason
+                });
+            });
+        }
+
         return {
             getBuildingRooms : getBuildingRooms,
-            getItems         : getItems
+            getItems         : getItems,
+            addRoom          : addRoom
         };
     }
 })();
