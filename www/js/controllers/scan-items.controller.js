@@ -359,6 +359,7 @@
         // Brings up camera to scan barcode or scans manually entered barcode
         function startScan() {
             if($window.cordova) {
+                // Access Device Camera
                 cordova.plugins.barcodeScanner.scan(
                     function (result) {
                         if(!result.cancelled){
@@ -397,6 +398,7 @@
                             if(vm.scanSettings.scanType == 'Single Item') {
                                 vm.editItem(item);
                             } else {
+                                // Add Item to In Wrong Room
                                 vm.room.inWrongRoom.push({
                                     id: item.id,
                                     barcode: item.barcode,
@@ -405,6 +407,7 @@
                                 });
                             }
                         } else {
+                            // Create New Item
                             newItem = {
                                 barcode: barcode,
                                 room: vm.scanSettings.room.id,
@@ -415,9 +418,6 @@
                         }
                     });
             } else {
-                if($window.cordova){
-                    $scope.$apply();
-                }
                 // Go directly to edit item for single item scans
                 if(vm.scanSettings.scanType == 'Single Item') {
                     vm.editItem(item);
