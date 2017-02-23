@@ -395,7 +395,7 @@
                 // Check to see if the item has already been created or not
                 getItemBarcodeApi(barcode)
                     .then(function success(item) {
-                        // Item has already been created but is currently in the wrong room or creating new item
+                        // Item has already been created but is currently in the wrong room
                         if(item) {
                             // Go directly to edit item for single item scans
                             if(vm.scanSettings.scanType == 'Single Item') {
