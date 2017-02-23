@@ -362,6 +362,7 @@
                 // Access Device Camera
                 cordova.plugins.barcodeScanner.scan(
                     function (result) {
+                        // Camera scan not cancelled
                         if(!result.cancelled){
                             saveItem(result.text);
                         }
@@ -369,7 +370,7 @@
                     function (error) {
                         alert("Scanning failed: " + error);
                     },
-                    {
+                    {   // camera Scan Settings
                         "preferFrontCamera" : false, // iOS and Android
                         "showFlipCameraButton" : false, // iOS and Android
                         "prompt" : "Place a barcode inside the scan area", // supported on Android only
@@ -377,9 +378,11 @@
                 );
             } else {
                 // Manually Enter Barcode
-                var barcode = vm.barcode;
-                vm.barcode = null;
-                saveItem(barcode);
+                if(vm.barcode) {
+                    var barcode = vm.barcode;
+                    vm.barcode = null;
+                    saveItem(barcode);
+                }
             }
         }
 
