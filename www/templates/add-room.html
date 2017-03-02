@@ -3,6 +3,7 @@
         <a class="button button-icon icon ion-plus" ng-click="vm.addRoom()"  ng-disabled="!vm.addRoomForm.$valid"></a>
     </ion-nav-buttons>
     <ion-content ng-show="vm.render">
+        <ion-refresher on-refresh="vm.onRefresh()"></ion-refresher>
     	<form name="vm.addRoomForm" novalidate>
         <ion-list>
     		<!-- Department -->
