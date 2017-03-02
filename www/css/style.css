@@ -1,8 +1,8 @@
 /* Bar (header, footer, nav) for UND theme */
 .bar.bar-ims {
-    border-color: #354497;
-    background-color: #3F51B5;
-    background-image: linear-gradient(0deg, #354497, #354497 50%, transparent 50%);
+    border-color: #007444;
+    background-color: #009A44;
+    background-image: linear-gradient(0deg, #007444, #007444 50%, transparent 50%);
     color: #FFFFFF;
 }
 
@@ -43,8 +43,8 @@
 
 /* Button for IMS Theme */
 .button.button-ims-blue {
-    border-color: #354497;
-    background-color: #3f51b5;
+    border-color: #007444;
+    background-color: #009A44;
     color: #FFFFFF;
 }
 
@@ -54,8 +54,8 @@
 }
 
 .button.button-ims-blue.active, .button.button-ims-blue.activated {
-    border-color: #354497;
-    background-color: #354497;
+    border-color: #007444;
+    background-color: #007444;
     box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -63,7 +63,7 @@
     border-color: transparent;
     background: none;
     box-shadow: none;
-    color: #3f51b5;
+    color: #009A44;
 }
 
 .button.button-ims-blue.button-icon {
@@ -72,13 +72,13 @@
 }
 
 .button.button-ims-blue.button-outline {
-    border-color: #3f51b5;
+    border-color: #009A44;
     background: transparent;
-    color: #3f51b5;
+    color: #009A44;
 }
 
 .button.button-ims-blue.button-outline.active, .button.button-ims-blue.button-outline.activated {
-    background-color: #3f51b5;
+    background-color: #009A44;
     box-shadow: none;
     color: #FFFFFF;
 }
@@ -200,7 +200,7 @@
 
 .Login h2 {
     text-align: center;
-    color: #3F51B5;
+    color: #009A44;
 }
 
 /*.Login button {
