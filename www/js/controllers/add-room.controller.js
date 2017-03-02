@@ -66,8 +66,8 @@
                 });
         }
 
-        function addRoomApi(departmentId, buildingId, room) {
-            return Rooms.addRoom(departmentId, buildingId, room)
+        function addRoomApi(buildingId, room) {
+            return Rooms.addRoom(buildingId, room)
                 .then(function success(room) {
                     return room;
                 }).catch(function error(reason) {
@@ -93,9 +93,18 @@
         // Calls add room api
         vm.addRoom = function() { 
             vm.clearMessages();  
-            addRoomApi(vm.department.id, vm.building.id, vm.room)
+            addRoomApi(vm.building.id, vm.room)
                 .then(function success(room) {
                     vm.success = true;
+
+                    vm.departments = null;
+                    vm.buildings = null;
+
+                    vm.department = null;
+                    vm.building = null;
+                    vm.room = null;
+            
+                    getData(true);
                 });
         };
 
