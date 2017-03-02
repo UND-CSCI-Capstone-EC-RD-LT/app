@@ -42,17 +42,14 @@
         }
 
         // Creates a new room in a department building
-        function addRoom(departmentId, buildingId, room) {
-            console.log(departmentId);
-            console.log(buildingId);
-            console.log(room);
+        function addRoom(buildingId, room) {
             return $http({
                 method: 'POST',
                 headers: { 'Content-Type': 'application/form-data; charset=UTF-8' },
                 data: {
-                    departmentId: departmentId,
-                    buildingId: buildingId,
-                    room: room
+                    creator: API.getUserId(),
+                    building: buildingId,
+                    number: room
                 },
                 url: (API.sailsUrl + '/rooms')
             }).then(function success(res) {
