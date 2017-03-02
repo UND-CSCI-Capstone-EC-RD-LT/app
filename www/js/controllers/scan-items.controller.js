@@ -94,7 +94,9 @@
 
              $q.all([d1.promise, d2.promise])
                 .then(function success() {
-
+                    if(isRefresh) {
+                        $scope.$broadcast('scroll.refreshComplete');
+                    }
                 });
 
         }
@@ -195,6 +197,14 @@
         //// END API FUNCTIONS ////
 
         //// VIEW MODEL FUNCTIONS ////
+
+        vm.onRefresh = function() {
+            if(!vm.scanSettings.set) {
+                onEnter(true);
+            } else {
+                $scope.$broadcast('scroll.refreshComplete');
+            }
+        }
 
         vm.setScanSettingDepartment = function() {
             // reset the building and room when new department is selected

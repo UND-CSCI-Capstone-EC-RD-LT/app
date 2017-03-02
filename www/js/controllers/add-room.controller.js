@@ -3,9 +3,9 @@
 
     angular
         .module('app.controllers')
-        .controller('AddRoomController', ['$state', '$q', '$ionicHistory', 'Departments', 'Buildings', 'Rooms', AddRoomController]);
+        .controller('AddRoomController', ['$scope', '$state', '$q', '$ionicHistory', 'Departments', 'Buildings', 'Rooms', AddRoomController]);
 
-    function AddRoomController($state, $q, $ionicHistory, Departments, Buildings, Rooms) {
+    function AddRoomController($scope, $state, $q, $ionicHistory, Departments, Buildings, Rooms) {
         var vm = this;
 
         onEnter();
@@ -36,6 +36,9 @@
             getDepartmentsApi()
                 .then(function success(departments) {
                     vm.departments = departments;
+                    if(isRefresh) {
+                        $scope.$broadcast('scroll.refreshComplete');
+                    }
                 });
 
         }
@@ -80,6 +83,10 @@
         //// END API FUNCTIONS ////
 
         //// VIEW MODEL FUNCTIONS ////
+
+        vm.onRefresh = function() {
+            onEnter(true);
+        }
 
         // Getting buildings for selected department
         vm.setDepartment = function() {

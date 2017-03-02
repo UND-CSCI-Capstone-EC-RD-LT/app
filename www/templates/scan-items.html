@@ -9,6 +9,7 @@
     	</span>
     </ion-nav-buttons>
   	<ion-content ng-show="vm.render" has-footer="true">
+        <ion-refresher ng-if="!vm.scanSettings.set" on-refresh="vm.onRefresh()"></ion-refresher>
         <input ng-if="vm.manualScan && vm.scanSettings.set" type="text" name="barcode" placeholder="Enter Barcode" ng-model="vm.barcode" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         <!-- Room Item List -->
   		<div ng-if="vm.scanSettings.set">
