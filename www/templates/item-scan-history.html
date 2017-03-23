@@ -1,0 +1,19 @@
+<ion-view class="Item-Scan-History">
+    <ion-nav-title>{{vm.title}}</ion-nav-title>
+  	<ion-content ng-show="vm.render">
+        <ion-refresher on-refresh="vm.onRefresh()"></ion-refresher>
+        <!-- Item Scan History List -->
+		<ion-list class="modal-item">
+            <ion-item ng-if="!vm.history">
+                <h2>No scan history</h2>
+            </ion-item>
+            <!-- Item -->
+            <ion-item ng-repeat="scan in vm.history" class="" ng-class="">
+                <p>3/22/2017</p>
+                <p>Room: 109</p>
+                <p>test@test.com</p>
+                <p>$40.00</p>
+            </ion-item>
+        </ion-list>
+</ion-view>
+

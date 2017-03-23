@@ -15,7 +15,6 @@
                 controller: 'LoginController',
                 controllerAs: 'vm'
             })
-
             .state('error', {
                 url: '/error',
                 params: {
@@ -28,8 +27,6 @@
                 controller: 'ErrorController',
                 controllerAs: 'vm'
             })
-
-
             .state('app', {
                 url: '/app',
                 abstract: true,
@@ -37,7 +34,6 @@
                 controller: 'AppController',
                 controllerAs: 'vm'
             })
-
             .state('app.scan-items', {
                 url: '/scan-items',
                 views: {
@@ -48,13 +44,22 @@
                   }
                 }
             })
-
             .state('app.edit-item', {
                 url: '/edit-item/:itemId',
                 views: {
                   'menuContent': {
                     templateUrl: 'templates/edit-item.html',
                         controller: 'EditItemController',
+                        controllerAs: 'vm'
+                  }
+                }
+            })
+            .state('app.item-scan-history', {
+                url: '/item-scan-history/:itemId',
+                views: {
+                  'menuContent': {
+                    templateUrl: 'templates/item-scan-history.html',
+                        controller: 'ItemScanHistoryController',
                         controllerAs: 'vm'
                   }
                 }
@@ -89,8 +94,7 @@
                     }
                 }
             })
-
-          .state('app.add-room', {
+            .state('app.add-room', {
                 url: '/add-room',
                 views: {
                     'menuContent': {
