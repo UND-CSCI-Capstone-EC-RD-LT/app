@@ -148,7 +148,8 @@
                 headers: { 'Content-Type': 'application/form-data; charset=UTF-8' },
                 data: {
                     id: item.id,
-                    room: room,
+                    setRoom: item.room,
+                    scanningRoom: room,
                     scanner: API.getUserId()
                 },
                 url: (API.sailsUrl + '/items/insertScan')

@@ -422,6 +422,8 @@
                     .then(function success(item) {
                         // Item has already been created but is currently in the wrong room
                         if(item) {
+                            item.room = item.roomId;
+                            delete item.roomId;
                             insertScanApi(item, vm.scanSettings.room.id)
                                 .then(function success(res) {
                                     // Go directly to edit item for single item scans
@@ -432,7 +434,7 @@
                                         vm.room.inWrongRoom.push({
                                             id: item.id,
                                             barcode: item.barcode,
-                                            room: item.roomId,
+                                            room: item.room,
                                             type: item.itemTypeId
                                         });
                                     }
