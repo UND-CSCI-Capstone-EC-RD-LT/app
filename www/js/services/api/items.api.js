@@ -137,6 +137,37 @@
                 });
         }
 
+        // Inserts a new item scan
+        function insertScan(item, room) {
+            console.log(item);
+            console.log(room);
+            console.log(API.getUserId());
+
+            return $http({
+                method: 'POST',
+                headers: { 'Content-Type': 'application/form-data; charset=UTF-8' },
+                data: {
+                    id: item.id,
+                    room: room,
+                    scanner: API.getUserId()
+                },
+                url: (API.sailsUrl + '/items/insertScan')
+            }).then(function success(res) {
+                console.log(res);
+                if(res.data) {
+                    return res.data.data;
+                } else {
+                    return $q.reject(res.data);
+                }
+            }).catch(function error(reason) {
+                console.log(reason);
+                return $q.reject({
+                    error: 'Error with API request.',
+                    origErr: reason
+                });
+            });
+        }
+
 
         return {
             getItem        : getItem,
@@ -144,7 +175,8 @@
             getItemTypes   : getItemTypes,
             searchItems    : searchItems,
             createItem     : createItem,
-            updateItem     : updateItem
+            updateItem     : updateItem,
+            insertScan     : insertScan
         };
     }
 })();

@@ -194,6 +194,18 @@
                 });
         }
 
+        function insertScanApi(item, room) {
+            return Items.insertScan(item, room)
+                .then(function success(item) {
+                    return item;
+                })
+                .catch(function error(reason) {
+                    //error handling
+                    $ionicHistory.clearCache().then(function(){ $state.go('error', {reason: reason}); });
+                    return $q.reject();
+                });
+        }
+
         //// END API FUNCTIONS ////
 
         //// VIEW MODEL FUNCTIONS ////
@@ -244,15 +256,18 @@
             newItem.type = vm.itemType.id;
             createItemApi(newItem)
                 .then(function success(item) {
-                    if(vm.scanSettings.scanType == 'Single Item') {
-                        vm.editItem(item);
-                    } else {
-                        item.scanned = true;
-                        vm.room.inRoom[newItem.type].scanned++;
-                        vm.room.inRoom[newItem.type].items.push(item);
-                    }
-                    hideNewItemModal();
-                    newItem = {};
+                    insertScanApi(item, vm.scanSettings.room.id)
+                        .then(function success(res) {
+                            if(vm.scanSettings.scanType == 'Single Item') {
+                                vm.editItem(item);
+                            } else {
+                                item.scanned = true;
+                                vm.room.inRoom[newItem.type].scanned++;
+                                vm.room.inRoom[newItem.type].items.push(item);
+                            }
+                            hideNewItemModal();
+                            newItem = {};
+                        });  
                 });
         };
 
@@ -398,7 +413,7 @@
 
         // Receive a barcode, checking if in correct room, item type exits, or in wrong room
         // For single item scans it goes directly to the edit item page
-        function saveItem(barcode) {
+        function saveItem(barcode) {   
             // Check if the item scanned is already in the room or not
             var item = checkItem(barcode);
             if(!item) {
@@ -407,18 +422,21 @@
                     .then(function success(item) {
                         // Item has already been created but is currently in the wrong room
                         if(item) {
-                            // Go directly to edit item for single item scans
-                            if(vm.scanSettings.scanType == 'Single Item') {
-                                vm.editItem(item);
-                            } else {
-                                // Add Item to In Wrong Room
-                                vm.room.inWrongRoom.push({
-                                    id: item.id,
-                                    barcode: item.barcode,
-                                    room: item.roomId,
-                                    type: item.itemTypeId
-                                });
-                            }
+                            insertScanApi(item, vm.scanSettings.room.id)
+                                .then(function success(res) {
+                                    // Go directly to edit item for single item scans
+                                    if(vm.scanSettings.scanType == 'Single Item') {
+                                        vm.editItem(item);
+                                    } else {
+                                        // Add Item to In Wrong Room
+                                        vm.room.inWrongRoom.push({
+                                            id: item.id,
+                                            barcode: item.barcode,
+                                            room: item.roomId,
+                                            type: item.itemTypeId
+                                        });
+                                    }
+                                });  
                         } else {
                             // Create New Item
                             newItem = {
@@ -431,10 +449,13 @@
                         }
                     });
             } else {
-                // Go directly to edit item for single item scans
-                if(vm.scanSettings.scanType == 'Single Item') {
-                    vm.editItem(item);
-                }
+                insertScanApi(item, vm.scanSettings.room.id)
+                    .then(function success(res) {
+                        // Go directly to edit item for single item scans
+                        if(vm.scanSettings.scanType == 'Single Item') {
+                            vm.editItem(item);
+                        }
+                    });  
             }
         }
 

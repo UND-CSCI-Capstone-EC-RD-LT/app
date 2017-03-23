@@ -60,7 +60,7 @@
             $window.sessionStorage.userId = userId
         }
 
-        function getUserId(userId) {
+        function getUserId() {
             return $window.sessionStorage.userId;
         }
 
