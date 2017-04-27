@@ -434,6 +434,8 @@
                 // Go directly to edit item for single item scans
                 if(vm.scanSettings.scanType == 'Single Item') {
                     vm.editItem(item);
+                } else {
+                    $scope.$apply();
                 }
             }
         }
